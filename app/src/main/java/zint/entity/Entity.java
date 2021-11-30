@@ -5,19 +5,16 @@ import java.util.*;
 public abstract class Entity {
 
 	private final String name;
-	private Optional<Integer> rememberedValue;
-
-	protected Entity(String name, Optional<Integer> value) {
-		this.name = name;
-		this.rememberedValue = value;
-	}
+	private final Optional<Integer> rememberedValue;
 
 	protected Entity(String name, Integer value) {
-		this(name, Optional.of(value));
+		this.name = name;
+		this.rememberedValue = Optional.of(value);
 	}
 
 	protected Entity(String name) {
-		this(name, Optional.empty());
+		this.name = name;
+		this.rememberedValue = Optional.empty();
 	}
 
 	public String getName() {

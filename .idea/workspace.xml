@@ -6,6 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="4204016a-f515-4127-8b73-cb0c347bac55" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/zint/entity/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/zint/entity/Entity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/zint/lexer/ZombieLexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/zint/lexer/ZombieLexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/zint/lexer/token/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/zint/lexer/token/Token.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/zint/lexer/token/Tokens.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/zint/lexer/token/Tokens.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,6 +18,10 @@
   </component>
   <component name="CodeInsightWorkspaceSettings">
     <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="OPEN_IN_BROWSER" value="true" />
+    <option name="OUTPUT_DIRECTORY" value="C:\Users\Filippo\Desktop" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -75,6 +83,8 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/test/java/zint/lexer" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../.." />
     <property name="settings.editor.selected.configurable" value="editor.preferences.import" />
   </component>
   <component name="RecentsManager">
@@ -83,7 +93,7 @@
       <recent name="zint.lexer" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.Run TestTokenPattern">
+  <component name="RunManager" selected="JUnit.Run TestZombieLexer">
     <configuration name="Zombie Interpreter [runOnConsole]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -141,11 +151,24 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Run TestZombieLexer" type="JUnit" factoryName="JUnit">
+      <module name="zint.app.test" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="16" />
+      <option name="PACKAGE_NAME" value="zint.lexer" />
+      <option name="MAIN_CLASS_NAME" value="zint.lexer.TestZombieLexer" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Gradle.Zombie Interpreter [runOnConsole]" />
       <item itemvalue="JUnit.Run TestConsole" />
       <item itemvalue="JUnit.Run TestEntity" />
       <item itemvalue="JUnit.Run TestTokenPattern" />
+      <item itemvalue="JUnit.Run TestZombieLexer" />
     </list>
     <recent_temporary>
       <list>
@@ -174,5 +197,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/zint$Run_TestZombieLexer.ic" NAME="Run TestZombieLexer Coverage Results" MODIFIED="1638283350287" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
