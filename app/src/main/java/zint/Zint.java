@@ -4,7 +4,7 @@ import java.io.*;
 
 public class Zint {
 
-	private static InputStream fin = System.in;
+	public static InputStream fin = System.in;
 
 	public static void main(final String[] args) {
 		if(args.length == 0) {
@@ -14,7 +14,7 @@ public class Zint {
 		parseInput();
 	}
 
-	private static void parseInput() {
+	public static int parseInput() {
 		BufferedReader input = new BufferedReader(new InputStreamReader(fin));
 		String line = null;
 		do {
@@ -23,8 +23,10 @@ public class Zint {
 				line = input.readLine();
 			} catch (IOException e) {
 				// silently ignore
+				return 1;
 			}
 		} while(line != null);
 		System.out.println("End-of-File detected.\nQuitting...");
+		return 0;
 	}
 }
