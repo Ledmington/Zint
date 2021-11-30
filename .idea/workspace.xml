@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4204016a-f515-4127-8b73-cb0c347bac55" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/zint/Zint.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/zint/Zint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/zint/entity/DummyEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/zint/entity/DummyEntity.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +76,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.import" />
   </component>
-  <component name="RunManager" selected="JUnit.Run Test">
+  <component name="RunManager" selected="JUnit.Run TestEntity">
     <configuration name="Zombie Interpreter [runOnConsole]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -98,7 +98,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Run Test" type="JUnit" factoryName="JUnit">
+    <configuration name="Run TestConsole" type="JUnit" factoryName="JUnit">
       <module name="zint.app.test" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="ALTERNATIVE_JRE_PATH" value="16" />
@@ -110,9 +110,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Run TestEntity" type="JUnit" factoryName="JUnit">
+      <module name="zint.app.test" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="16" />
+      <option name="PACKAGE_NAME" value="zint.entity" />
+      <option name="MAIN_CLASS_NAME" value="zint.entity.TestEntity" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Gradle.Zombie Interpreter [runOnConsole]" />
-      <item itemvalue="JUnit.Run Test" />
+      <item itemvalue="JUnit.Run TestConsole" />
+      <item itemvalue="JUnit.Run TestEntity" />
     </list>
     <recent_temporary>
       <list>
