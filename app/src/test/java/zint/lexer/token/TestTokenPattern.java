@@ -1,10 +1,12 @@
 package zint.lexer.token;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.List;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestTokenPattern {
 
@@ -46,5 +48,13 @@ public class TestTokenPattern {
 		List<String> examples = List.of("abc", "zombie", "Var", "FOO", "task12", "a1b2c3");
 		List<String> counterExamples = List.of("0", "123456", "2a", "a a");
 		checkExamples(TokenType.ID, examples, counterExamples);
+	}
+
+	@Test
+	public void entity() {
+		List<String> examples = List.of("zombie", "ghost", "vampire", "demon", "djinn", "enslaved undead", "restless undead", "free-willed undead");
+		List<String> counterExamples = examples.stream()
+						.flatMap(s -> Stream.of("a"+s, s+"a", s.toUpperCase())).toList();
+		checkExamples(TokenType.ENTITY, examples, counterExamples);
 	}
 }
