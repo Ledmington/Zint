@@ -4,5 +4,6 @@ public enum TokenType {
 	WHITESPACE,
 	ID,
 	NUMBER,
+	STRING,
 	ENTITY
 }

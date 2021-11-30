@@ -51,6 +51,14 @@ public class TestTokenPattern {
 	}
 
 	@Test
+	public void string() {
+		List<String> examples = List.of("abc", "zombie", "Var", "FOO", "task12", "a1b2c3", "hello world", "").stream().map(s -> "\""+s+"\"").toList();
+		List<String> counterExamples = Stream.of("abc", "zombie", "Var", "FOO", "task12", "a1b2c3", "hello world")
+						.flatMap(s -> Stream.of("\""+s, s+"\"", "\'"+s, s+"\'", "\'"+s+"\'")).toList();
+		checkExamples(TokenType.STRING, examples, counterExamples);
+	}
+
+	@Test
 	public void entity() {
 		List<String> examples = List.of("zombie", "ghost", "vampire", "demon", "djinn", "enslaved undead", "restless undead", "free-willed undead");
 		List<String> counterExamples = examples.stream()
