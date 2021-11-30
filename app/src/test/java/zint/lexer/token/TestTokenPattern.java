@@ -37,7 +37,7 @@ public class TestTokenPattern {
 	@Test
 	public void number() {
 		List<String> examples = List.of("0", "12", "00000", "981734891");
-		List<String> counterExamples = List.of("a12", "12a", "x");
+		List<String> counterExamples = List.of("a12", "12a", "x", "x y");
 		checkExamples(TokenType.NUMBER, examples, counterExamples);
 	}
 
