@@ -15,15 +15,22 @@ public class Tokens {
 			entry(TokenType.STRING,     Pattern.compile("\"[^\"]*\"")),
 			entry(TokenType.ENTITY,     Pattern.compile("zombie|ghost|vampire|demon|djinn|enslaved undead|restless undead|free-willed undead")),
 
-			simplePattern(TokenType.SUMMON),
-			simplePattern(TokenType.ANIMATE),
-			simplePattern(TokenType.BIND),
-			simplePattern(TokenType.DISTURB),
-			simplePattern(TokenType.TASK),
-			entry(TokenType.IS_A, Pattern.compile("is a|is an"))
+			exactMatch(TokenType.SUMMON),
+			exactMatch(TokenType.ANIMATE),
+			exactMatch(TokenType.BIND),
+			exactMatch(TokenType.DISTURB),
+			exactMatch(TokenType.TASK),
+			entry(TokenType.IS_A, Pattern.compile("is a|is an")),
+
+			exactMatch(TokenType.REMEMBER),
+			exactMatch(TokenType.MOAN),
+			exactMatch(TokenType.BANISH),
+			exactMatch(TokenType.FORGET),
+			exactMatch(TokenType.INVOKE),
+			exactMatch(TokenType.SAY)
 	);
 
-	private static Entry<TokenType, Pattern> simplePattern(TokenType t) {
+	private static Entry<TokenType, Pattern> exactMatch(TokenType t) {
 		return entry(t, Pattern.compile(t.name().toLowerCase()));
 	}
 }

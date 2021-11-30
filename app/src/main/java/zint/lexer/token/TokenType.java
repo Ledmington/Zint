@@ -14,5 +14,13 @@ public enum TokenType {
 	BIND,
 	DISTURB,
 	TASK,
-	IS_A
+	IS_A,
+
+	// Task statements
+	REMEMBER,
+	MOAN,
+	BANISH,
+	FORGET,
+	INVOKE,
+	SAY
 }
