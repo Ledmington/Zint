@@ -13,7 +13,7 @@ public class TestTokenPattern {
 	@Test
 	public void allTokens() {
 		for(TokenType t : TokenType.values()) {
-			assertTrue(Tokens.tokenMap.containsKey(t));
+			assertTrue(Tokens.tokenMap.containsKey(t), "Token " + t.name() + " is not in the TokensMap");
 		}
 	}
 
@@ -64,5 +64,21 @@ public class TestTokenPattern {
 		List<String> counterExamples = examples.stream()
 						.flatMap(s -> Stream.of("a"+s, s+"a", s.toUpperCase())).toList();
 		checkExamples(TokenType.ENTITY, examples, counterExamples);
+	}
+
+	@Test
+	public void entityDeclarations() {
+		List<String> examples;
+		List<String> counterExamples;
+
+		for(TokenType t : List.of(TokenType.SUMMON, TokenType.ANIMATE, TokenType.DISTURB, TokenType.BIND, TokenType.TASK)) {
+			examples = List.of(t.name().toLowerCase());
+			counterExamples = List.of(t.name());
+			checkExamples(t, examples, counterExamples);
+		}
+
+		examples = List.of("is a", "is an");
+		counterExamples = List.of("IS A", "IS AN", "IS_A", "is is", "is ann");
+		checkExamples(TokenType.IS_A, examples, counterExamples);
 	}
 }
