@@ -78,10 +78,16 @@ public class TestTokenPattern {
 	public void entityDeclarations() {
 		List<String> examples;
 		List<String> counterExamples;
+		List<TokenType> tokensToTest = List.of(
+				TokenType.SUMMON,
+				TokenType.ANIMATE,
+				TokenType.DISTURB,
+				TokenType.BIND,
+				TokenType.TASK);
 
-		for(TokenType t : List.of(TokenType.SUMMON, TokenType.ANIMATE, TokenType.DISTURB, TokenType.BIND, TokenType.TASK)) {
+		for(TokenType t : tokensToTest) {
 			examples = List.of(t.name().toLowerCase());
-			counterExamples = List.of(t.name());
+			counterExamples = List.of(t.name(), " "+t.name().toLowerCase());
 			checkExamples(t, examples, counterExamples);
 		}
 
@@ -94,10 +100,38 @@ public class TestTokenPattern {
 	public void taskStatements() {
 		List<String> examples;
 		List<String> counterExamples;
+		List<TokenType> tokensToTest = List.of(
+				TokenType.REMEMBER,
+				TokenType.MOAN,
+				TokenType.BANISH,
+				TokenType.FORGET,
+				TokenType.INVOKE,
+				TokenType.SAY);
 
-		for(TokenType t : List.of(TokenType.REMEMBER, TokenType.MOAN, TokenType.BANISH, TokenType.FORGET, TokenType.INVOKE, TokenType.SAY)) {
+		for(TokenType t : tokensToTest) {
 			examples = List.of(t.name().toLowerCase());
-			counterExamples = List.of(t.name());
+			counterExamples = List.of(t.name(), " "+t.name().toLowerCase());
+			checkExamples(t, examples, counterExamples);
+		}
+	}
+
+	@Test
+	public void flowControl() {
+		List<String> examples;
+		List<String> counterExamples;
+		List<TokenType> tokensToTest = List.of(
+				TokenType.SHAMBLE,
+				TokenType.UNTIL,
+				TokenType.AROUND,
+				TokenType.STUMBLE,
+				TokenType.TASTE,
+				TokenType.GOOD,
+				TokenType.BAD,
+				TokenType.SPIT);
+
+		for(TokenType t : tokensToTest) {
+			examples = List.of(t.name().toLowerCase());
+			counterExamples = List.of(t.name(), " "+t.name().toLowerCase());
 			checkExamples(t, examples, counterExamples);
 		}
 	}

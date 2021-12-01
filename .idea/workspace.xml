@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4204016a-f515-4127-8b73-cb0c347bac55" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="b7d8b69d-8197-4b24-b35f-d45441f8f67d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/zint/lexer/token/TokenType.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/zint/lexer/token/TokenType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/zint/lexer/token/Tokens.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/zint/lexer/token/Tokens.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/test/java/zint/lexer/token/TestTokenPattern.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/zint/lexer/token/TestTokenPattern.java" afterDir="false" />

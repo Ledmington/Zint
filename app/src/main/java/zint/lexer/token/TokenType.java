@@ -22,5 +22,15 @@ public enum TokenType {
 	BANISH,
 	FORGET,
 	INVOKE,
-	SAY
+	SAY,
+
+	// Flow control
+	SHAMBLE,
+	UNTIL,
+	AROUND,
+	STUMBLE,
+	TASTE,
+	GOOD,
+	BAD,
+	SPIT
 }
