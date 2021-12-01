@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestTokenPattern {
 
-	private static Map<TokenType, Integer> tokenCounterMap = new EnumMap(TokenType.class);
+	private static final Map<TokenType, Integer> tokenCounterMap = new EnumMap<>(TokenType.class);
 
 	@BeforeAll
 	public static void allTokens() {
@@ -60,9 +60,9 @@ public class TestTokenPattern {
 
 	@Test
 	public void string() {
-		List<String> examples = List.of("abc", "zombie", "Var", "FOO", "task12", "a1b2c3", "hello world", "").stream().map(s -> "\""+s+"\"").toList();
+		List<String> examples = Stream.of("abc", "zombie", "Var", "FOO", "task12", "a1b2c3", "hello world", "").map(s -> "\""+s+"\"").toList();
 		List<String> counterExamples = Stream.of("abc", "zombie", "Var", "FOO", "task12", "a1b2c3", "hello world")
-						.flatMap(s -> Stream.of("\""+s, s+"\"", "\'"+s, s+"\'", "\'"+s+"\'")).toList();
+						.flatMap(s -> Stream.of("\""+s, s+"\"", "'"+s, s+"'", "'"+s+"'")).toList();
 		checkExamples(TokenType.STRING, examples, counterExamples);
 	}
 

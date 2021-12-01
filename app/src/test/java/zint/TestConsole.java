@@ -22,7 +22,7 @@ public class TestConsole {
 	public void test() {
 		try {
 			out.write("hello\nwelcome\n");
-			assertTrue(Zint.parseInput() == 0);
+			assertEquals(Zint.parseInput(), 0);
 			assertEquals(Zint.fin, System.in);
 		} catch (IOException e) {
 			fail();
