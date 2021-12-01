@@ -32,5 +32,10 @@ public enum TokenType {
 	TASTE,
 	GOOD,
 	BAD,
-	SPIT
+	SPIT,
+
+	// Operators
+	REMEMBERING,
+	REND,
+	TURN
 }

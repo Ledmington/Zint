@@ -40,7 +40,12 @@ public class Tokens {
 			exactMatch(TokenType.TASTE),
 			exactMatch(TokenType.GOOD),
 			exactMatch(TokenType.BAD),
-			exactMatch(TokenType.SPIT)
+			exactMatch(TokenType.SPIT),
+
+			// Operators
+			exactMatch(TokenType.REMEMBERING),
+			exactMatch(TokenType.REND),
+			exactMatch(TokenType.TURN)
 
 	);
 

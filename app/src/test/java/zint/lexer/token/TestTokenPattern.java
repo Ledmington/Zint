@@ -86,8 +86,10 @@ public class TestTokenPattern {
 				TokenType.TASK);
 
 		for(TokenType t : tokensToTest) {
-			examples = List.of(t.name().toLowerCase());
-			counterExamples = List.of(t.name(), " "+t.name().toLowerCase());
+			String name = t.name();
+			String lowerName = name.toLowerCase();
+			examples = List.of(lowerName);
+			counterExamples = List.of(name, " "+lowerName, lowerName+" ");
 			checkExamples(t, examples, counterExamples);
 		}
 
@@ -109,8 +111,10 @@ public class TestTokenPattern {
 				TokenType.SAY);
 
 		for(TokenType t : tokensToTest) {
-			examples = List.of(t.name().toLowerCase());
-			counterExamples = List.of(t.name(), " "+t.name().toLowerCase());
+			String name = t.name();
+			String lowerName = name.toLowerCase();
+			examples = List.of(lowerName);
+			counterExamples = List.of(name, " "+lowerName, lowerName+" ");
 			checkExamples(t, examples, counterExamples);
 		}
 	}
@@ -130,8 +134,28 @@ public class TestTokenPattern {
 				TokenType.SPIT);
 
 		for(TokenType t : tokensToTest) {
-			examples = List.of(t.name().toLowerCase());
-			counterExamples = List.of(t.name(), " "+t.name().toLowerCase());
+			String name = t.name();
+			String lowerName = name.toLowerCase();
+			examples = List.of(lowerName);
+			counterExamples = List.of(name, " "+lowerName, lowerName+" ");
+			checkExamples(t, examples, counterExamples);
+		}
+	}
+
+	@Test
+	public void operators() {
+		List<String> examples;
+		List<String> counterExamples;
+		List<TokenType> tokensToTest = List.of(
+				TokenType.REMEMBERING,
+				TokenType.REND,
+				TokenType.TURN);
+
+		for(TokenType t : tokensToTest) {
+			String name = t.name();
+			String lowerName = name.toLowerCase();
+			examples = List.of(lowerName);
+			counterExamples = List.of(name, " "+lowerName, lowerName+" ");
 			checkExamples(t, examples, counterExamples);
 		}
 	}
