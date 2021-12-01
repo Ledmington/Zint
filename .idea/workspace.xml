@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4204016a-f515-4127-8b73-cb0c347bac55" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/zint/lexer/token/TokenType.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/zint/lexer/token/TokenType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/zint/lexer/token/Tokens.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/zint/lexer/token/Tokens.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/zint/lexer/token/TestTokenPattern.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/zint/lexer/token/TestTokenPattern.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +70,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="21dABzIqjUuwQZtd1hFxX2PoEwz" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -89,7 +95,7 @@
       <recent name="zint.lexer" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.Run TestZombieLexer">
+  <component name="RunManager" selected="JUnit.Run TestTokenPattern">
     <configuration name="Zombie Interpreter [runOnConsole]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />

@@ -1,7 +1,26 @@
 package zint.lexer.token;
 
 public enum TokenType {
+	// Basic tokens
 	WHITESPACE,
 	ID,
-	NUMBER
+	NUMBER,
+	STRING,
+	ENTITY,
+
+	// Entity declarations
+	SUMMON,
+	ANIMATE,
+	BIND,
+	DISTURB,
+	TASK,
+	IS_A,
+
+	// Task statements
+	REMEMBER,
+	MOAN,
+	BANISH,
+	FORGET,
+	INVOKE,
+	SAY
 }
