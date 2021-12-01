@@ -139,6 +139,12 @@ public class TestTokenAcceptor {
 				assertTrue(ta.test(l));
 			}
 		}
+
+		// ZeroOrMore returns always true, but this test fails because
+		// some steps in the pipeline didn't complete successfully
+		assertFalse(ta.test(List.of(
+				new Token(TokenType.BAD)
+		)));
 	}
 
 	@Test
