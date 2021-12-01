@@ -49,6 +49,8 @@ public class Tokens {
 
 	);
 
+	private Tokens() {}
+
 	private static Entry<TokenType, Pattern> exactMatch(TokenType t) {
 		return entry(t, Pattern.compile(t.name().toLowerCase()));
 	}
