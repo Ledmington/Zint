@@ -154,4 +154,37 @@ public class TestTokenAcceptor {
 			assertTrue(ta.test(Collections.nCopies(i, new Token(TokenType.ID))));
 		}
 	}
+
+	@Test
+	public void doubleOneOrMore() {
+		TokenAcceptor ta = tab
+				.oneOrMore(TokenType.ID)
+				.oneOrMore(TokenType.SUMMON)
+				.build();
+
+		assertFalse(ta.test(List.of()));
+		assertFalse(ta.test(List.of(
+				new Token(TokenType.ID)
+		)));
+		assertFalse(ta.test(List.of(
+				new Token(TokenType.SUMMON)
+		)));
+		assertFalse(ta.test(List.of(
+				new Token(TokenType.ANIMATE),
+				new Token(TokenType.SUMMON)
+		)));
+		assertFalse(ta.test(List.of(
+				new Token(TokenType.ID),
+				new Token(TokenType.ANIMATE)
+		)));
+
+		for(int i=1; i<10; i++) {
+			for(int j=1; j<10; j++) {
+				List<Token> l = new LinkedList<>();
+				l.addAll(Collections.nCopies(i, new Token(TokenType.ID)));
+				l.addAll(Collections.nCopies(j, new Token(TokenType.SUMMON)));
+				assertTrue(ta.test(l));
+			}
+		}
+	}
 }
