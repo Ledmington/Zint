@@ -81,4 +81,77 @@ public class TestTokenAcceptor {
 				new Token(TokenType.ID)
 		)));
 	}
+
+	@Test
+	public void doubleAny() {
+		TokenAcceptor ta = tab
+				.any(TokenType.ID, TokenType.SUMMON)
+				.any(TokenType.ANIMATE, TokenType.BANISH)
+				.build();
+
+		assertTrue(ta.test(List.of(
+				new Token(TokenType.ID),
+				new Token(TokenType.ANIMATE)
+		)));
+		assertTrue(ta.test(List.of(
+				new Token(TokenType.ID),
+				new Token(TokenType.BANISH)
+		)));
+		assertTrue(ta.test(List.of(
+				new Token(TokenType.SUMMON),
+				new Token(TokenType.ANIMATE)
+		)));
+		assertTrue(ta.test(List.of(
+				new Token(TokenType.SUMMON),
+				new Token(TokenType.BANISH)
+		)));
+	}
+
+	@Test
+	public void singleZeroOrMore() {
+		TokenAcceptor ta = tab
+				.zeroOrMore(TokenType.ID)
+				.build();
+
+		for(int i=0; i<10; i++) {
+			assertTrue(ta.test(Collections.nCopies(i, new Token(TokenType.ID))));
+		}
+
+		// ZeroOrMore returns always true, but this test fails because
+		// some steps in the pipeline didn't complete successfully
+		assertFalse(ta.test(List.of(
+				new Token(TokenType.BAD)
+		)));
+	}
+
+	@Test
+	public void doubleZeroOrMore() {
+		TokenAcceptor ta = tab
+				.zeroOrMore(TokenType.ID)
+				.zeroOrMore(TokenType.ANIMATE)
+				.build();
+
+		for(int i=0; i<10; i++) {
+			for(int j=0; j<10; j++) {
+				List<Token> l = new LinkedList<>();
+				l.addAll(Collections.nCopies(i, new Token(TokenType.ID))) ;
+				l.addAll(Collections.nCopies(j, new Token(TokenType.ANIMATE)));
+				assertTrue(ta.test(l));
+			}
+		}
+	}
+
+	@Test
+	public void singleOneOrMore() {
+		TokenAcceptor ta = tab.oneOrMore(TokenType.ID).build();
+
+		assertFalse(ta.test(List.of()));
+		assertFalse(ta.test(List.of(
+				new Token(TokenType.SUMMON)
+		)));
+
+		for(int i=1; i<10; i++) {
+			assertTrue(ta.test(Collections.nCopies(i, new Token(TokenType.ID))));
+		}
+	}
 }
