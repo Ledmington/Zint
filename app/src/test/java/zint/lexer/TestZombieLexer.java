@@ -40,4 +40,13 @@ public class TestZombieLexer {
 
 		assertFalse(lexer.hasNext());
 	}
+
+	@Test
+	public void unknownCharacterTokens() {
+		for(char c : ";:-\\|!£$%&/()=?'^*[]{}#@€<>àèéìòù_§°ç+.,~`".toCharArray()) {
+			lexer = new ZombieLexer(new ByteArrayInputStream(String.valueOf(c).getBytes()));
+			assertTrue(lexer.hasNext());
+			assertThrows(NoSuchTokenException.class, () -> lexer.next());
+		}
+	}
 }

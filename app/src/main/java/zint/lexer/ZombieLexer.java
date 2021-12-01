@@ -60,7 +60,11 @@ public class ZombieLexer implements Iterator<Token> {
 			line = null;
 		}
 
-		return new Token(matchesToken(tmp).get(), tmp);
+		Optional<TokenType> foundToken = matchesToken(tmp);
+		if(foundToken.isEmpty()) {
+			throw new NoSuchTokenException(tmp);
+		}
+		return new Token(foundToken.get(), tmp);
 	}
 
 	private Optional<TokenType> matchesToken(final String word) {
