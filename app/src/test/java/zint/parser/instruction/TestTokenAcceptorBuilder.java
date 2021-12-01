@@ -24,4 +24,11 @@ public class TestTokenAcceptorBuilder {
 		assertThrows(IllegalArgumentException.class, () -> tab.any());
 		assertThrows(IllegalArgumentException.class, () -> tab.any(TokenType.ID));
 	}
+
+	@Test
+	public void noNulls() {
+		assertThrows(NullPointerException.class, () -> tab.one(null));
+		assertThrows(NullPointerException.class, () -> tab.any(null));
+		assertThrows(NullPointerException.class, () -> tab.zeroOrMore(null));
+	}
 }

@@ -10,11 +10,13 @@ public class TokenAcceptorBuilder {
 	private final List<Predicate<ListIterator<Token>>> pipeline = new LinkedList<>();
 
 	public TokenAcceptorBuilder one(final TokenType type) {
+		Objects.requireNonNull(type);
 		pipeline.add(it -> it.hasNext() && it.next().getType() == type);
 		return this;
 	}
 
 	public TokenAcceptorBuilder any(final TokenType... types) {
+		Objects.requireNonNull(types);
 		if(types.length < 2) {
 			throw new IllegalArgumentException();
 		}
@@ -30,6 +32,7 @@ public class TokenAcceptorBuilder {
 	}
 
 	public TokenAcceptorBuilder zeroOrMore(final TokenType type) {
+		Objects.requireNonNull(type);
 		pipeline.add(it -> {
 			while(it.hasNext()) {
 				if(it.next().getType() != type) {
