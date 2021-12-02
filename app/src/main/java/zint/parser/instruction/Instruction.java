@@ -1,10 +1,10 @@
 package zint.parser.instruction;
 
-public abstract class Instruction {
+public class Instruction {
 
 	private final InstructionType type;
 
-	protected Instruction(InstructionType type) {
+	public Instruction(InstructionType type) {
 		this.type = type;
 	}
 
