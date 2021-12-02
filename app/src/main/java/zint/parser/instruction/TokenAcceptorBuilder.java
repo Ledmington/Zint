@@ -17,9 +17,11 @@ public class TokenAcceptorBuilder {
 
 	public TokenAcceptorBuilder any(final TokenType... types) {
 		Objects.requireNonNull(types);
-		if(types.length < 2) {
+
+		if(types.length < 2 || types.length != Set.of(types).size()) {
 			throw new IllegalArgumentException();
 		}
+
 		pipeline.add(it -> {
 			if(!it.hasNext()) return false;
 			TokenType t = it.next().getType();

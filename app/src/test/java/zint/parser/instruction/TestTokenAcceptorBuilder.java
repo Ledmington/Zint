@@ -23,12 +23,14 @@ public class TestTokenAcceptorBuilder {
 	public void wrongAny() {
 		assertThrows(IllegalArgumentException.class, () -> tab.any());
 		assertThrows(IllegalArgumentException.class, () -> tab.any(TokenType.ID));
+		assertThrows(IllegalArgumentException.class, () -> tab.any(TokenType.ID, TokenType.ID));
+		assertDoesNotThrow(() -> tab.any(TokenType.ID, TokenType.ANIMATE));
 	}
 
 	@Test
 	public void noNulls() {
 		assertThrows(NullPointerException.class, () -> tab.one(null));
-		assertThrows(NullPointerException.class, () -> tab.any(null));
+		assertThrows(NullPointerException.class, () -> tab.any((TokenType[]) null));
 		assertThrows(NullPointerException.class, () -> tab.zeroOrMore(null));
 	}
 }
