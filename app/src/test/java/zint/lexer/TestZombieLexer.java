@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import zint.lexer.token.*;
 
 import java.io.*;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,5 +61,19 @@ public class TestZombieLexer {
 		Token t = lexer.next();
 		assertEquals(TokenType.IS, t.getType());
 		assertEquals(t.getValue(), "is");
+	}
+
+	@Test
+	public void checkLastCharacterIsNotDiscarded() {
+		Tokens.tokenMap.entrySet().stream()
+				// Getting only the "exact match" tokens
+				.filter(e -> e.getKey().name().toLowerCase().equals(e.getValue().pattern()))
+				.map(Map.Entry::getKey)
+				.forEach(type -> {
+					buildLexer(type.name().toLowerCase());
+					Token token = lexer.next();
+					assertEquals(type, token.getType(), "TokenType \"" + type.name() + "\" is not matched correctly");
+					assertEquals(type.name().toLowerCase(), token.getValue());
+				});
 	}
 }
