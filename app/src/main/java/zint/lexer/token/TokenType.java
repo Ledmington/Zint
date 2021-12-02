@@ -3,7 +3,6 @@ package zint.lexer.token;
 public enum TokenType {
 	// Basic tokens
 	WHITESPACE,
-	ID,
 	NUMBER,
 	STRING,
 	ENTITY,
@@ -14,7 +13,8 @@ public enum TokenType {
 	BIND,
 	DISTURB,
 	TASK,
-	IS_A,
+	IS,
+	ARTICLE,
 
 	// Task statements
 	REMEMBER,
@@ -37,5 +37,7 @@ public enum TokenType {
 	// Operators
 	REMEMBERING,
 	REND,
-	TURN
+	TURN,
+
+	ID
 }

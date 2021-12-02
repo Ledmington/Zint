@@ -22,7 +22,8 @@ public class Tokens {
 			exactMatch(TokenType.BIND),
 			exactMatch(TokenType.DISTURB),
 			exactMatch(TokenType.TASK),
-			entry(TokenType.IS_A, Pattern.compile("is a|is an")),
+			exactMatch(TokenType.IS),
+			entry(TokenType.ARTICLE, Pattern.compile("a|an")),
 
 			// Task statements
 			exactMatch(TokenType.REMEMBER),
