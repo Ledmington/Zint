@@ -50,7 +50,7 @@ public class ZombieLexer implements Iterator<Token> {
 		}
 
 		String tmp;
-		if(line.length() > 1) {
+		if(line.length() > 1 && hasNext()) {
 			char lastChar = line.charAt(line.length() - 1);
 			tmp = line.substring(0, line.length() - 1);
 			line = String.valueOf(lastChar);
@@ -68,8 +68,8 @@ public class ZombieLexer implements Iterator<Token> {
 	}
 
 	private Optional<TokenType> matchesToken(final String word) {
-		for(TokenType t : TokenType.values()) {
-			if(Tokens.tokenMap.get(t).matcher(word).matches()) {
+		for (TokenType t : TokenType.values()) {
+			if (Tokens.tokenMap.get(t).matcher(word).matches()) {
 				return Optional.of(t);
 			}
 		}

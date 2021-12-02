@@ -11,9 +11,13 @@ public class TestZombieLexer {
 
 	private ZombieLexer lexer;
 
+	private void buildLexer(final String code) {
+		lexer = new ZombieLexer(new ByteArrayInputStream(code.getBytes()));
+	}
+
 	@Test
 	public void empty() {
-		lexer = new ZombieLexer(new ByteArrayInputStream("".getBytes()));
+		buildLexer("");
 		assertFalse(lexer.hasNext());
 		assertThrows(IllegalStateException.class,
 				() -> lexer.next());
@@ -21,7 +25,7 @@ public class TestZombieLexer {
 
 	@Test
 	public void simple() {
-		lexer = new ZombieLexer(new ByteArrayInputStream("hello\ntoken\n7".getBytes()));
+		buildLexer("hello\ntoken\n7");
 
 		assertTrue(lexer.hasNext());
 		assertEquals(lexer.next().getType(), TokenType.ID);
@@ -44,9 +48,17 @@ public class TestZombieLexer {
 	@Test
 	public void unknownCharacterTokens() {
 		for(char c : ";:-\\|!£$%&/()=?'^*[]{}#@€<>àèéìòù_§°ç+.,~`".toCharArray()) {
-			lexer = new ZombieLexer(new ByteArrayInputStream(String.valueOf(c).getBytes()));
+			buildLexer(String.valueOf(c));
 			assertTrue(lexer.hasNext());
 			assertThrows(NoSuchTokenException.class, () -> lexer.next());
 		}
+	}
+
+	@Test
+	public void checkIsAgainstID() {
+		buildLexer("is");
+		Token t = lexer.next();
+		assertEquals(TokenType.IS, t.getType());
+		assertEquals(t.getValue(), "is");
 	}
 }

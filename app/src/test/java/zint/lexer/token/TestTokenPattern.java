@@ -83,7 +83,8 @@ public class TestTokenPattern {
 				TokenType.ANIMATE,
 				TokenType.DISTURB,
 				TokenType.BIND,
-				TokenType.TASK);
+				TokenType.TASK,
+				TokenType.IS);
 
 		for(TokenType t : tokensToTest) {
 			String name = t.name();
@@ -93,9 +94,9 @@ public class TestTokenPattern {
 			checkExamples(t, examples, counterExamples);
 		}
 
-		examples = List.of("is a", "is an");
-		counterExamples = List.of("IS A", "IS AN", "IS_A", "is is", "is ann");
-		checkExamples(TokenType.IS_A, examples, counterExamples);
+		examples = List.of("a", "an");
+		counterExamples = List.of("A", "AN", "A", "is is", "ann");
+		checkExamples(TokenType.ARTICLE, examples, counterExamples);
 	}
 
 	@Test
