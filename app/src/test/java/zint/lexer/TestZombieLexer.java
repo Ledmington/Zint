@@ -5,7 +5,9 @@ import zint.lexer.token.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.*;
 
+import static java.util.Map.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestZombieLexer {
@@ -74,6 +76,26 @@ public class TestZombieLexer {
 					Token token = lexer.next();
 					assertEquals(type, token.getType(), "TokenType \"" + type.name() + "\" is not matched correctly");
 					assertEquals(type.name().toLowerCase(), token.getValue());
+				});
+	}
+
+	@Test
+	public void whitespaceShouldHaveLowerPriorityThanEntity() {
+		Tokens.tokenMap.entrySet().stream()
+				// Getting only entity tokens with spaces inside
+				.filter(e -> e.getKey() == TokenType.ENTITY)
+				.flatMap(e -> {
+					return Stream.of(e.getValue().pattern().split("\\|"))
+							.map(s -> entry(e.getKey(), s));
+				})
+				.filter(e -> e.getValue().contains(" "))
+				.forEach(e -> {
+					TokenType type = e.getKey();
+					String entity = e.getValue();
+					buildLexer(entity);
+					Token token = lexer.next();
+					assertEquals(entity, token.getValue());
+					assertEquals(type, token.getType());
 				});
 	}
 }

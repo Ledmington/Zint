@@ -2,6 +2,7 @@ package zint.parser;
 
 import org.junit.jupiter.api.*;
 import zint.lexer.*;
+import zint.lexer.token.*;
 import zint.parser.instruction.*;
 
 import java.io.*;
@@ -36,9 +37,11 @@ public class TestZombieParser {
 
 	@Test
 	public void entityDeclaration() {
-		buildParser("mario is a zombie");
-		assertTrue(p.hasNext());
-		assertEquals(InstructionType.ENTITY_DECLARATION, p.next().getType());
-		assertFalse(p.hasNext());
+		for(String entity : Tokens.tokenMap.get(TokenType.ENTITY).pattern().split("\\|")) {
+			buildParser("mario is a " + entity);
+			assertTrue(p.hasNext());
+			assertEquals(InstructionType.ENTITY_DECLARATION, p.next().getType());
+			assertFalse(p.hasNext());
+		}
 	}
 }

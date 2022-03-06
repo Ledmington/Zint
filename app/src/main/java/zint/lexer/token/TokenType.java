@@ -39,5 +39,6 @@ public enum TokenType {
 	REND,
 	TURN,
 
+	// This is a basic token but it has to have the lowest priority possible
 	ID
 }
