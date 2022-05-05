@@ -58,7 +58,7 @@ public class TokenAcceptorBuilder {
 
 		return tokens -> {
 			ListIterator<Token> it = tokens.listIterator();
-			for(var p : pipeline) {
+			for(Predicate<ListIterator<Token>> p : pipeline) {
 				if(!p.test(it)) return false;
 			}
 			return !it.hasNext();

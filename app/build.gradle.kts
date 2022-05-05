@@ -4,6 +4,7 @@ version = "0.1.0"
 plugins {
     application
     java
+    id("java-library")
     checkstyle
     pmd
     jacoco
@@ -23,8 +24,9 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 tasks.test {
@@ -42,13 +44,13 @@ tasks.withType<Checkstyle>().configureEach {
     reports {
         xml.required.set(false)
         html.required.set(true)
-        html.stylesheet = resources.text.fromFile("config/xsl/checkstyle-custom.xsl")
+        html.stylesheet = resources.text.fromFile("${rootDir}config/xsl/checkstyle-custom.xsl")
     }
 }
 
 checkstyle {
     toolVersion = "8.15"
-    configFile = file("config/checkstyle/checkstyle.xml")
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
     isIgnoreFailures = true
 }
 
