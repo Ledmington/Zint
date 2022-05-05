@@ -1,9 +1,10 @@
-plugins {
-    application
-}
-
 group = "zint"
 version = "0.1.0"
+
+plugins {
+    application
+    java
+}
 
 repositories {
     mavenCentral()
