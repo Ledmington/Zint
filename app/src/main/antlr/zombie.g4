@@ -10,7 +10,7 @@ grammar zombie;
 
 prog: progbody EOF;
 
-progbody: entityDeclaration*;
+progbody: entityDeclaration+;
 
 entityDeclaration:
 	ID IS A ZOMBIE
@@ -22,9 +22,12 @@ entityDeclaration:
 	| ID IS A DEMON
 	| ID IS A DJINN;
 
+// Keywords
 IS: 'is';
 A: 'a';
 AN: 'an';
+
+// Entity types
 ZOMBIE: 'zombie';
 GHOST: 'ghost';
 VAMPIRE: 'vampire';
@@ -35,8 +38,7 @@ RESTLESS_UNDEAD: 'restless undead';
 FREE_WILLED_UNDEAD: 'free-willed undead';
 
 DIGIT: ( '0' ..'9');
-
-ID: ('a' ..'z' | 'A' ..'Z')+;
+ID: ('a' ..'z' | 'A' ..'Z') ('a' ..'z' | 'A' ..'Z' | DIGIT)*;
 WHITESP: ( '\t' | ' ' | '\r' | '\n')+ -> channel(HIDDEN);
 //COMMENT  : '/*' .*? '*/' -> channel(HIDDEN) ;
 ERR:

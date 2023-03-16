@@ -8,7 +8,6 @@
  */
 package com.ledmington.zint;
 
-import java.io.InputStream;
 import java.util.Arrays;
 
 import org.antlr.v4.runtime.CharStream;
@@ -24,13 +23,14 @@ import gen.zombieParser;
 
 public class Zint {
 
-    public static final InputStream fin = System.in;
-
     public static void main(final String[] args) {
         Arrays.stream(args).forEach(System.out::println);
-        final ZintVisitor visitor = new ZintVisitor();
 
-        final CharStream chars = CharStreams.fromString("banana is a zombie");
+        final Node ast = getAST("banana is a zombie");
+    }
+
+    public static Node getAST(final String code) {
+        final CharStream chars = CharStreams.fromString(code);
         final zombieLexer lexer = new zombieLexer(chars);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
         for (Token token : tokens.getTokens()) {
@@ -40,7 +40,7 @@ public class Zint {
 
         final ParseTree st = parser.prog();
 
-        System.out.println("Generating AST");
-        final Node ast = visitor.visit(st);
+        final ZintVisitor visitor = new ZintVisitor();
+        return visitor.visit(st);
     }
 }
