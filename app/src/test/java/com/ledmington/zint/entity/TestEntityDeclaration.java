@@ -22,6 +22,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.ledmington.zint.Zint;
 import com.ledmington.zint.ast.EntityType;
+import com.ledmington.zint.ast.ForgetNode;
 import com.ledmington.zint.ast.InstructionNode;
 import com.ledmington.zint.ast.ProgNode;
 import com.ledmington.zint.ast.RememberNode;
@@ -97,5 +98,22 @@ public class TestEntityDeclaration {
         assertEquals(1, instructions.size());
         assertTrue(instructions.get(0) instanceof RememberNode);
         assertEquals(12, ((RememberNode) instructions.get(0)).getValue());
+    }
+
+    @Test
+    public void simpleForget() {
+        final ProgNode ast = (ProgNode)
+                Zint.getAST(
+                        """
+                banana is a zombie
+                summon
+                        forget
+                bind
+                """);
+
+        final List<InstructionNode> instructions =
+                ast.getProgBody().getDeclarations().get(0).getInstructions();
+        assertEquals(1, instructions.size());
+        assertTrue(instructions.get(0) instanceof ForgetNode);
     }
 }

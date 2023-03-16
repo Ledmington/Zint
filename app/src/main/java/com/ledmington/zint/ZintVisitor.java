@@ -13,6 +13,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import com.ledmington.zint.ast.EntityDeclarationNode;
 import com.ledmington.zint.ast.EntityType;
+import com.ledmington.zint.ast.ForgetNode;
 import com.ledmington.zint.ast.IdNode;
 import com.ledmington.zint.ast.InstructionNode;
 import com.ledmington.zint.ast.Node;
@@ -105,6 +106,8 @@ public final class ZintVisitor extends zombieBaseVisitor<Node> {
 
         if (ctx.REMEMBER() != null) {
             return new RememberNode(Integer.parseInt(ctx.NUMBER().getText()), ctx);
+        } else if (ctx.FORGET() != null) {
+            return new ForgetNode(ctx);
         } else {
             throw new RuntimeException("Unknown instruction");
         }

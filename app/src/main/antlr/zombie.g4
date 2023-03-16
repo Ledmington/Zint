@@ -30,13 +30,14 @@ entityDeclaration:
 		| TASK instruction* BIND
 	);
 
-instruction: REMEMBER NUMBER;
+instruction: REMEMBER NUMBER | FORGET;
 
 // Keywords
 IS: 'is';
 A: 'a';
 AN: 'an';
 REMEMBER: 'remember';
+FORGET: 'forget';
 
 // Entity types
 ZOMBIE: 'zombie';
