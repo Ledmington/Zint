@@ -8,15 +8,23 @@
  */
 package com.ledmington.zint.ast;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 public abstract class Node {
 
     private final int line;
+    private final int column;
 
-    public Node(final int line) {
-        this.line = line;
+    public Node(final ParserRuleContext ctx) {
+        this.line = ctx.getStart().getLine();
+        this.column = ctx.getStart().getCharPositionInLine();
     }
 
     public int getLine() {
         return line;
+    }
+
+    public int getColumn() {
+        return column;
     }
 }

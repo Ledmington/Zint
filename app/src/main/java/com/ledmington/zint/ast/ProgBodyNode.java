@@ -8,9 +8,20 @@
  */
 package com.ledmington.zint.ast;
 
+import java.util.List;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+
 public final class ProgBodyNode extends Node {
 
-    public ProgBodyNode(int line) {
-        super(line);
+    private final List<EntityDeclarationNode> declarations;
+
+    public ProgBodyNode(final List<EntityDeclarationNode> declarations, final ParserRuleContext ctx) {
+        super(ctx);
+        this.declarations = declarations;
+    }
+
+    public List<EntityDeclarationNode> getDeclarations() {
+        return declarations;
     }
 }

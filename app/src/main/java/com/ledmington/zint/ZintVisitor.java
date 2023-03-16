@@ -11,7 +11,11 @@ package com.ledmington.zint;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import com.ledmington.zint.ast.EntityDeclarationNode;
+import com.ledmington.zint.ast.EntityType;
+import com.ledmington.zint.ast.IdNode;
 import com.ledmington.zint.ast.Node;
+import com.ledmington.zint.ast.ProgBodyNode;
 import com.ledmington.zint.ast.ProgNode;
 
 import gen.zombieBaseVisitor;
@@ -53,33 +57,35 @@ public final class ZintVisitor extends zombieBaseVisitor<Node> {
 
     public Node visitProg(final ProgContext ctx) {
         printVarAndProdName(ctx);
-        return new ProgNode(visit(ctx.progbody()), ctx.get);
+        return new ProgNode((ProgBodyNode) visit(ctx.progbody()), ctx);
     }
 
     public Node visitProgbody(final ProgbodyContext ctx) {
         printVarAndProdName(ctx);
-        for (EntityDeclarationContext decl : ctx.entityDeclaration()) {
-            visit(decl);
-        }
-        return null;
+        return new ProgBodyNode(
+                ctx.entityDeclaration().stream()
+                        .map(decl -> (EntityDeclarationNode) visit(decl))
+                        .toList(),
+                ctx);
     }
 
     public Node visitEntityDeclaration(final EntityDeclarationContext ctx) {
         printVarAndProdName(ctx);
-        System.out.println(ctx.ID().getText());
         if (ctx.ZOMBIE() != null || ctx.ENSLAVED_UNDEAD() != null) {
-            System.out.println("zombie");
-        } else if (ctx.GHOST() != null || ctx.RESTLESS_UNDEAD() != null) {
-            System.out.println("ghost");
-        } else if (ctx.VAMPIRE() != null || ctx.FREE_WILLED_UNDEAD() != null) {
-            System.out.println("vampire");
-        } else if (ctx.DEMON() != null) {
-            System.out.println("demon");
-        } else if (ctx.DJINN() != null) {
-            System.out.println("djinn");
-        } else {
-            throw new RuntimeException("Unkown entity");
+            return new EntityDeclarationNode(new IdNode(ctx.ID().getText(), ctx), EntityType.ZOMBIE, ctx);
         }
-        return null;
+        if (ctx.GHOST() != null || ctx.RESTLESS_UNDEAD() != null) {
+            return new EntityDeclarationNode(new IdNode(ctx.ID().getText(), ctx), EntityType.GHOST, ctx);
+        }
+        if (ctx.VAMPIRE() != null || ctx.FREE_WILLED_UNDEAD() != null) {
+            return new EntityDeclarationNode(new IdNode(ctx.ID().getText(), ctx), EntityType.VAMPIRE, ctx);
+        }
+        if (ctx.DEMON() != null) {
+            return new EntityDeclarationNode(new IdNode(ctx.ID().getText(), ctx), EntityType.DEMON, ctx);
+        }
+        if (ctx.DJINN() != null) {
+            return new EntityDeclarationNode(new IdNode(ctx.ID().getText(), ctx), EntityType.DJINN, ctx);
+        }
+        throw new RuntimeException("Unkown entity");
     }
 }

@@ -10,16 +10,16 @@ package com.ledmington.zint.ast;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-public final class ProgNode extends Node {
+public final class IdNode extends Node {
 
-    private final ProgBodyNode progBody;
+    private final String name;
 
-    public ProgNode(final ProgBodyNode progBody, final ParserRuleContext ctx) {
+    public IdNode(final String name, final ParserRuleContext ctx) {
         super(ctx);
-        this.progBody = progBody;
+        this.name = name;
     }
 
-    public ProgBodyNode getProgBody() {
-        return progBody;
+    public String getName() {
+        return name;
     }
 }
