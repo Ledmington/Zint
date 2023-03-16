@@ -13,19 +13,30 @@ prog: progbody EOF;
 progbody: entityDeclaration+;
 
 entityDeclaration:
-	ID IS A ZOMBIE
-	| ID IS AN ENSLAVED_UNDEAD
-	| ID IS A GHOST
-	| ID IS A RESTLESS_UNDEAD
-	| ID IS A VAMPIRE
-	| ID IS A FREE_WILLED_UNDEAD
-	| ID IS A DEMON
-	| ID IS A DJINN;
+	(
+		ID IS A ZOMBIE
+		| ID IS AN ENSLAVED_UNDEAD
+		| ID IS A GHOST
+		| ID IS A RESTLESS_UNDEAD
+		| ID IS A VAMPIRE
+		| ID IS A FREE_WILLED_UNDEAD
+		| ID IS A DEMON
+		| ID IS A DJINN
+	) (
+		SUMMON instruction* ANIMATE
+		| SUMMON instruction* BIND
+		| SUMMON instruction* DISTURB
+		| TASK instruction* ANIMATE
+		| TASK instruction* BIND
+	);
+
+instruction: REMEMBER NUMBER;
 
 // Keywords
 IS: 'is';
 A: 'a';
 AN: 'an';
+REMEMBER: 'remember';
 
 // Entity types
 ZOMBIE: 'zombie';
@@ -37,7 +48,15 @@ ENSLAVED_UNDEAD: 'enslaved undead';
 RESTLESS_UNDEAD: 'restless undead';
 FREE_WILLED_UNDEAD: 'free-willed undead';
 
+// Entity declaration statements
+SUMMON: 'summon';
+ANIMATE: 'animate';
+BIND: 'bind';
+DISTURB: 'disturb';
+TASK: 'task';
+
 DIGIT: ( '0' ..'9');
+NUMBER: DIGIT+;
 ID: ('a' ..'z' | 'A' ..'Z') ('a' ..'z' | 'A' ..'Z' | DIGIT)*;
 WHITESP: ( '\t' | ' ' | '\r' | '\n')+ -> channel(HIDDEN);
 //COMMENT  : '/*' .*? '*/' -> channel(HIDDEN) ;

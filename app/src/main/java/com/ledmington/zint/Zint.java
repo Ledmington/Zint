@@ -26,7 +26,7 @@ public class Zint {
     public static void main(final String[] args) {
         Arrays.stream(args).forEach(System.out::println);
 
-        final Node ast = getAST("banana is a zombie");
+        final Node ast = getAST("banana is a zombie summon remember 12 bind");
     }
 
     public static Node getAST(final String code) {

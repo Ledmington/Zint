@@ -8,17 +8,25 @@
  */
 package com.ledmington.zint.ast;
 
+import java.util.List;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public final class EntityDeclarationNode extends Node {
 
     private final IdNode id;
     private final EntityType entityType;
+    private final List<InstructionNode> instructions;
 
-    public EntityDeclarationNode(final IdNode id, final EntityType type, final ParserRuleContext ctx) {
+    public EntityDeclarationNode(
+            final IdNode id,
+            final EntityType type,
+            final List<InstructionNode> instructions,
+            final ParserRuleContext ctx) {
         super(ctx);
         this.id = id;
         this.entityType = type;
+        this.instructions = instructions;
     }
 
     public IdNode getID() {
@@ -27,5 +35,9 @@ public final class EntityDeclarationNode extends Node {
 
     public EntityType getType() {
         return entityType;
+    }
+
+    public List<InstructionNode> getInstructions() {
+        return instructions;
     }
 }

@@ -14,12 +14,15 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import com.ledmington.zint.ast.EntityDeclarationNode;
 import com.ledmington.zint.ast.EntityType;
 import com.ledmington.zint.ast.IdNode;
+import com.ledmington.zint.ast.InstructionNode;
 import com.ledmington.zint.ast.Node;
 import com.ledmington.zint.ast.ProgBodyNode;
 import com.ledmington.zint.ast.ProgNode;
+import com.ledmington.zint.ast.RememberNode;
 
 import gen.zombieBaseVisitor;
 import gen.zombieParser.EntityDeclarationContext;
+import gen.zombieParser.InstructionContext;
 import gen.zombieParser.ProgContext;
 import gen.zombieParser.ProgbodyContext;
 
@@ -71,21 +74,39 @@ public final class ZintVisitor extends zombieBaseVisitor<Node> {
 
     public Node visitEntityDeclaration(final EntityDeclarationContext ctx) {
         printVarAndProdName(ctx);
+        final IdNode id = new IdNode(ctx.ID().getText(), ctx);
+        EntityType type;
+
         if (ctx.ZOMBIE() != null || ctx.ENSLAVED_UNDEAD() != null) {
-            return new EntityDeclarationNode(new IdNode(ctx.ID().getText(), ctx), EntityType.ZOMBIE, ctx);
+            type = EntityType.ZOMBIE;
+        } else if (ctx.GHOST() != null || ctx.RESTLESS_UNDEAD() != null) {
+            type = EntityType.GHOST;
+        } else if (ctx.VAMPIRE() != null || ctx.FREE_WILLED_UNDEAD() != null) {
+            type = EntityType.VAMPIRE;
+        } else if (ctx.DEMON() != null) {
+            type = EntityType.DEMON;
+        } else if (ctx.DJINN() != null) {
+            type = EntityType.DJINN;
+        } else {
+            throw new RuntimeException("Unkown entity");
         }
-        if (ctx.GHOST() != null || ctx.RESTLESS_UNDEAD() != null) {
-            return new EntityDeclarationNode(new IdNode(ctx.ID().getText(), ctx), EntityType.GHOST, ctx);
+
+        return new EntityDeclarationNode(
+                id,
+                type,
+                ctx.instruction().stream()
+                        .map(inst -> (InstructionNode) visit(inst))
+                        .toList(),
+                ctx);
+    }
+
+    public Node visitInstruction(final InstructionContext ctx) {
+        printVarAndProdName(ctx);
+
+        if (ctx.REMEMBER() != null) {
+            return new RememberNode(Integer.parseInt(ctx.NUMBER().getText()), ctx);
+        } else {
+            throw new RuntimeException("Unknown instruction");
         }
-        if (ctx.VAMPIRE() != null || ctx.FREE_WILLED_UNDEAD() != null) {
-            return new EntityDeclarationNode(new IdNode(ctx.ID().getText(), ctx), EntityType.VAMPIRE, ctx);
-        }
-        if (ctx.DEMON() != null) {
-            return new EntityDeclarationNode(new IdNode(ctx.ID().getText(), ctx), EntityType.DEMON, ctx);
-        }
-        if (ctx.DJINN() != null) {
-            return new EntityDeclarationNode(new IdNode(ctx.ID().getText(), ctx), EntityType.DJINN, ctx);
-        }
-        throw new RuntimeException("Unkown entity");
     }
 }

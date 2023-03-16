@@ -9,7 +9,9 @@
 package com.ledmington.zint.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.ledmington.zint.Zint;
 import com.ledmington.zint.ast.EntityType;
+import com.ledmington.zint.ast.InstructionNode;
 import com.ledmington.zint.ast.ProgNode;
+import com.ledmington.zint.ast.RememberNode;
 
 public class TestEntityDeclaration {
 
@@ -75,5 +79,23 @@ public class TestEntityDeclaration {
                 EntityType.DJINN, ast.getProgBody().getDeclarations().get(2).getType());
         assertEquals(
                 "apple2", ast.getProgBody().getDeclarations().get(2).getID().getName());
+    }
+
+    @Test
+    public void simpleRemember() {
+        final ProgNode ast = (ProgNode)
+                Zint.getAST(
+                        """
+                banana is a zombie
+                summon
+                        remember 12
+                bind
+                """);
+
+        final List<InstructionNode> instructions =
+                ast.getProgBody().getDeclarations().get(0).getInstructions();
+        assertEquals(1, instructions.size());
+        assertTrue(instructions.get(0) instanceof RememberNode);
+        assertEquals(12, ((RememberNode) instructions.get(0)).getValue());
     }
 }
