@@ -4,7 +4,6 @@ plugins {
 	id 'java-library'
 	id 'checkstyle'
 	id 'pmd'
-	id 'jacoco'
 	id 'antlr'
 	id 'com.adarshr.test-logger' version '3.2.0' // for pretty test logs
 	id 'com.diffplug.spotless' version '6.17.0' // for code formatting
@@ -84,10 +83,6 @@ pmd {
 	ignoreFailures = true
 }
 
-jacoco {
-	toolVersion = "0.8.2"
-}
-
 generateGrammarSource {
 	outputDirectory = file("src/main/java/gen")
 	maxHeapSize = "64m"
@@ -99,14 +94,6 @@ task customClean(type: Delete) {
 	delete "src/main/java/gen"
 }
 clean.dependsOn customClean
-
-test {
-	finalizedBy jacocoTestReport // report is always generated after tests run
-}
-
-jacocoTestReport {
-	dependsOn test // tests are required to run before generating the report
-}
 
 testlogger {
 	theme 'standard'
