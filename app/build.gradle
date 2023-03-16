@@ -1,0 +1,209 @@
+plugins {
+	id 'application'
+	id 'java'
+	id 'java-library'
+	id 'checkstyle'
+	id 'pmd'
+	id 'jacoco'
+	id 'antlr'
+	id 'com.adarshr.test-logger' version '3.2.0' // for pretty test logs
+	id 'com.diffplug.spotless' version '6.17.0' // for code formatting
+	id 'com.github.ben-manes.versions' version '0.46.0' // for checking latest version of gradle, gradle plugins and dependencies
+	id 'de.undercouch.download' version '5.3.1' // for downloading files in tasks
+}
+
+group 'com.ledmington.zint'
+version '0.1.0'
+description 'ZOMBIE interpreter'
+String author = 'Filippo Barbari'
+String authorMail = 'filippo.barbari@gmail.com'
+String appName = 'Zint'
+String appNameLowercase = 'zint'
+String mainClassName = "${group}.Zint"
+
+java {
+	sourceCompatibility = '17'
+	targetCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation "com.google.guava:guava:31.1-jre"
+
+	antlr "org.antlr:antlr4:4.12.0"
+
+	// testing stuff
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+}
+
+tasks.withType(JavaCompile) {
+	options.release = 17
+	options.compilerArgs << '-Xdiags:verbose'
+	options.compilerArgs << '-Xlint:unchecked'
+	options.compilerArgs << '-Xlint:deprecation'
+	options.deprecation = true
+	options.encoding = 'UTF-8'
+}
+
+application {
+	mainClass = mainClassName
+}
+
+test {
+	useJUnitPlatform()
+	// failFast true
+}
+
+// task runOnConsole(type: JavaExec) {
+// 	group = "run"
+// 	standardInput = System.in
+// 	classpath = project.sourceSets.main.runtimeClasspath
+// 	mainClass "${mainClassName}"
+// }
+
+tasks.withType(Checkstyle) {
+	reports {
+		xml.required.set(false)
+		html.required.set(true)
+		html.stylesheet = resources.text.fromFile("${rootDir}config/xsl/checkstyle-custom.xsl")
+	}
+}
+
+checkstyle {
+	toolVersion = "8.15"
+	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+	ignoreFailures = true
+}
+
+pmd {
+	ignoreFailures = true
+}
+
+jacoco {
+	toolVersion = "0.8.2"
+}
+
+generateGrammarSource {
+	outputDirectory = file("src/main/java/gen")
+	maxHeapSize = "64m"
+	arguments += ["-visitor", "-long-messages"]
+}
+
+task customClean(type: Delete) {
+	delete "src/main/antlr/.antlr"
+	delete "src/main/java/gen"
+}
+clean.dependsOn customClean
+
+test {
+	finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacocoTestReport {
+	dependsOn test // tests are required to run before generating the report
+}
+
+testlogger {
+	theme 'standard'
+	// theme 'mocha'
+	// theme 'mocha-parallel'
+
+	showExceptions true
+	showStackTraces true
+	showFullStackTraces false
+	showCauses true
+
+	slowThreshold 2000
+
+	showSummary true
+	showSimpleNames false
+	showPassed true
+	showSkipped true
+	showFailed true
+	showOnlySlow false
+
+	showStandardStreams false
+	showPassedStandardStreams true
+	showSkippedStandardStreams true
+	showFailedStandardStreams true
+
+	logLevel 'lifecycle'
+}
+
+spotless {
+	// optional: limit format enforcement to just the files changed by this feature branch
+	//ratchetFrom 'origin/main'
+
+	format 'misc', {
+		target '*.gradle', '*.md', '.gitignore'
+		trimTrailingWhitespace()
+		indentWithTabs()
+		endWithNewline()
+		setEncoding('utf-8')
+	}
+
+	java {
+		target fileTree('.') {
+			include '**/*.java'
+			exclude '**/build/**', '**/build-*/**', '**/bin/**', '**/gen/**'
+		}
+		removeUnusedImports()
+		formatAnnotations()
+		trimTrailingWhitespace()
+		endWithNewline()
+		setEncoding('utf-8')
+		palantirJavaFormat('2.26.0')
+
+		// check https://javadoc.io/doc/com.diffplug.spotless/spotless-plugin-gradle/latest/com/diffplug/gradle/spotless/JavaExtension.html
+		importOrder('java', 'javax', 'javafx', 'com', 'org', 'picocli', 'com.ledmington')
+
+		licenseHeader String.join("\n", "/*",
+		" * Copyright (C) 2022-${new Date().format('yyyy')} ${author} <${authorMail}>",
+		" *",
+		" * This file is part of ${appName}.",
+		" *",
+		" * ${appName} can not be copied and/or distributed without",
+		" * the express permission of ${author}.",
+		" */")
+	}
+}
+
+String fatJarName = "${buildDir}/libs/${appNameLowercase}-${version}.jar"
+task buildFatJar(type: Jar) {
+	group 'distribution'
+	description 'Builds the fat jar of the application'
+	from sourceSets.main.output
+	dependsOn configurations.runtimeClasspath
+	from {
+		configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+	}
+	duplicatesStrategy = 'include'
+	manifest {
+		archiveBaseName = appNameLowercase
+		attributes(
+			//"Implementation-Title": "Gradle",
+			"Implementation-Version": version,
+			"Main-Class": "$mainClassName"
+		)
+	}
+
+	doLast {
+		println "The fat jar is ${fatJarName}"
+		println String.format("Fat jar size: %.3f MB", new File(fatJarName).length() / 1_000_000)
+	}
+}
+
+tasks.compileJava.dependsOn(spotlessApply)
+
+task doc(dependsOn: javadoc) {
+	group 'documentation'
+	description 'Generates Javadoc and opens it with the default browser'
+	doLast {
+		Desktop.desktop.browse "file://$buildDir/docs/javadoc/index.html".toURI()
+	}
+}

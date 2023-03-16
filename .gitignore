@@ -3,6 +3,7 @@
 
 # Ignore Gradle build output directory
 build
+app/bin
 ### Java template
 # Compiled class file
 *.class
@@ -43,3 +44,9 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+# ANTLR generated files
+app/src/main/antlr/.antlr
+app/src/main/java/gen
+
+.vscode/
