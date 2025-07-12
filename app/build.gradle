@@ -2,7 +2,6 @@ plugins {
 	id 'application'
 	id 'java'
 	id 'java-library'
-	id 'checkstyle'
 	id 'pmd'
 	id 'antlr'
 	id 'com.adarshr.test-logger' version '3.2.0' // for pretty test logs
@@ -21,8 +20,9 @@ String appNameLowercase = 'zint'
 String mainClassName = "${group}.Zint"
 
 java {
-	sourceCompatibility = '17'
-	targetCompatibility = '17'
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
 }
 
 repositories {
@@ -30,8 +30,6 @@ repositories {
 }
 
 dependencies {
-	implementation "com.google.guava:guava:31.1-jre"
-
 	antlr "org.antlr:antlr4:4.12.0"
 
 	// testing stuff
@@ -40,11 +38,10 @@ dependencies {
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 }
 
-tasks.withType(JavaCompile) {
-	options.release = 17
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs << '-Xlint:all'
 	options.compilerArgs << '-Xdiags:verbose'
-	options.compilerArgs << '-Xlint:unchecked'
-	options.compilerArgs << '-Xlint:deprecation'
+	options.compilerArgs << '-Werror'
 	options.deprecation = true
 	options.encoding = 'UTF-8'
 }
@@ -65,20 +62,6 @@ test {
 // 	mainClass "${mainClassName}"
 // }
 
-tasks.withType(Checkstyle) {
-	reports {
-		xml.required.set(false)
-		html.required.set(true)
-		html.stylesheet = resources.text.fromFile("${rootDir}config/xsl/checkstyle-custom.xsl")
-	}
-}
-
-checkstyle {
-	toolVersion = "8.15"
-	configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
-	ignoreFailures = true
-}
-
 pmd {
 	ignoreFailures = true
 }
@@ -89,7 +72,7 @@ generateGrammarSource {
 	arguments += ["-visitor", "-long-messages"]
 }
 
-task customClean(type: Delete) {
+tasks.register('customClean', Delete) {
 	delete "src/main/antlr/.antlr"
 	delete "src/main/java/gen"
 }
@@ -186,11 +169,3 @@ task buildFatJar(type: Jar) {
 }
 
 tasks.compileJava.dependsOn(spotlessApply)
-
-task doc(dependsOn: javadoc) {
-	group 'documentation'
-	description 'Generates Javadoc and opens it with the default browser'
-	doLast {
-		Desktop.desktop.browse "file://$buildDir/docs/javadoc/index.html".toURI()
-	}
-}
