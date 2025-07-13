@@ -145,6 +145,8 @@ spotless {
 	}
 }
 
+tasks.compileJava.dependsOn(spotlessApply)
+
 tasks.register('fatJar', Jar) {
 	group = 'distribution'
 	description = 'Builds the fat jar of the application'
@@ -171,4 +173,27 @@ tasks.register('fatJar', Jar) {
 }
 
 tasks.build.dependsOn(fatJar)
-tasks.compileJava.dependsOn(spotlessApply)
+
+tasks.register('downloadParserGenerator', Download) {
+	group = 'utilities'
+	description = 'Downloads the Parser Generator from GitHub'
+	src "https://github.com/Ledmington/parser_generator/releases/download/snapshot-2025-07-12-54e63f9/parser-gen-cli-0.1.0.jar"
+	dest new File(project.layout.buildDirectory.get().toString(), "parser-generator.jar")
+	overwrite false
+	acceptAnyCertificate false
+}
+
+tasks.register('generateZombieParser', JavaExec) {
+	dependsOn downloadParserGenerator
+	group = 'utilities'
+	description = 'Generates the parser of the ZOMBIE language'
+	classpath downloadParserGenerator.dest
+	args = [
+			"-g", path(project.layout.projectDirectory.toString(), "src", "main", "resources", "zombie.g"),
+			"-o", path(project.layout.projectDirectory.toString(), "src", "main", "java", "com", "ledmington", "zint", "gen", "ZombieParser.java"),
+			"-p", "com.ledmington.zint.gen",
+			// "--verbose"
+	]
+}
+
+tasks.compileJava.dependsOn(generateZombieParser)

@@ -3,3 +3,4 @@ bin/
 .gradle/
 .idea/
 .vscode/
+app/src/main/java/com/ledmington/zint/gen/*
