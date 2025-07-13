@@ -4,3 +4,4 @@ bin/
 .idea/
 .vscode/
 app/src/main/java/com/ledmington/zint/gen/*
+!app/src/main/java/com/ledmington/zint/gen/.gitkeep
