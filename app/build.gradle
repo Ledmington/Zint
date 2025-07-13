@@ -3,20 +3,26 @@ plugins {
 	id 'java'
 	id 'java-library'
 	id 'pmd'
-	id 'com.adarshr.test-logger' version '3.2.0' // for pretty test logs
-	id 'com.diffplug.spotless' version '6.17.0' // for code formatting
-	id 'com.github.ben-manes.versions' version '0.46.0' // for checking latest version of gradle, gradle plugins and dependencies
-	id 'de.undercouch.download' version '5.3.1' // for downloading files in tasks
+	id 'com.adarshr.test-logger' version '3.2.0'
+	id 'com.diffplug.spotless' version '7.0.4'
+	id 'com.github.ben-manes.versions' version '0.46.0'
+	id 'de.undercouch.download' version '5.3.1'
+}
+
+static def path(String... args) {
+	return String.join(File.separator, args)
 }
 
 group 'com.ledmington.zint'
 version '0.1.0'
-description 'ZOMBIE interpreter'
+String appDescription = 'ZOMBIE interpreter'
 String author = 'Filippo Barbari'
 String authorMail = 'filippo.barbari@gmail.com'
 String appName = 'Zint'
 String appNameLowercase = 'zint'
 String mainClassName = "${group}.Zint"
+
+ext.palantirVersion = '2.70.0'
 
 java {
 	toolchain {
@@ -64,7 +70,7 @@ pmd {
 }
 
 testlogger {
-	theme 'standard'
+	theme 'standard-parallel'
 
 	showExceptions true
 	showStackTraces true
@@ -89,40 +95,49 @@ testlogger {
 }
 
 spotless {
-	// optional: limit format enforcement to just the files changed by this feature branch
-	//ratchetFrom 'origin/main'
-
 	format 'misc', {
-		target '*.gradle', '*.md', '.gitignore'
+		target '*.md', '.gitignore', '.gitattributes'
 		trimTrailingWhitespace()
-		indentWithTabs()
+		leadingSpacesToTabs()
 		endWithNewline()
 		setEncoding('utf-8')
 	}
 
 	java {
 		target fileTree('.') {
-			include '**/*.java'
-			exclude '**/build/**', '**/build-*/**', '**/bin/**', '**/gen/**'
+			include path('app', '**', '*.java')
+			exclude path('**', 'build', '**'), path('**', 'build-*', '**'), path('**', 'bin', '**')
 		}
+		setEncoding('utf-8')
 		removeUnusedImports()
+		palantirJavaFormat("${palantirVersion}").formatJavadoc(true)
+		leadingSpacesToTabs()
 		formatAnnotations()
 		trimTrailingWhitespace()
 		endWithNewline()
-		setEncoding('utf-8')
-		palantirJavaFormat('2.70.0')
 
 		// check https://javadoc.io/doc/com.diffplug.spotless/spotless-plugin-gradle/latest/com/diffplug/gradle/spotless/JavaExtension.html
-		importOrder('java', 'javax', 'javafx', 'com', 'org', 'picocli', 'com.ledmington')
+		importOrder('java', 'javax', 'javafx', 'org.junit', 'org.openjdk', 'com', 'com.ledmington', 'org', group as String)
 
-		licenseHeader String.join("\n", "/*",
-		" * Copyright (C) 2022-${new Date().format('yyyy')} ${author} <${authorMail}>",
-		" *",
-		" * This file is part of ${appName}.",
-		" *",
-		" * ${appName} can not be copied and/or distributed without",
-		" * the express permission of ${author}.",
-		" */")
+		licenseHeader String.join("\n",
+				"/*",
+				" * ${appName} - ${appDescription}",
+				" * Copyright (C) 2025-${new Date().format('yyyy')} ${author} <${authorMail}>",
+				" *",
+				" * This program is free software: you can redistribute it and/or modify",
+				" * it under the terms of the GNU General Public License as published by",
+				" * the Free Software Foundation, either version 3 of the License, or",
+				" * (at your option) any later version.",
+				" *",
+				" * This program is distributed in the hope that it will be useful,",
+				" * but WITHOUT ANY WARRANTY; without even the implied warranty of",
+				" * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the",
+				" * GNU General Public License for more details.",
+				" *",
+				" * You should have received a copy of the GNU General Public License",
+				" * along with this program.  If not, see <http://www.gnu.org/licenses/>.",
+				" */",
+		)
 	}
 }
 
@@ -135,7 +150,7 @@ tasks.register('buildFatJar', Jar) {
 	from {
 		configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
 	}
-	duplicatesStrategy = 'include'
+	duplicatesStrategy = DuplicatesStrategy.INCLUDE
 	manifest {
 		archiveBaseName = appNameLowercase
 		attributes(
