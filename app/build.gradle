@@ -110,7 +110,7 @@ spotless {
 	java {
 		target fileTree('.') {
 			include path('**', '*.java')
-			exclude path('gen', '*.java')
+			exclude path('**', 'gen', '*.java')
 			exclude path('**', 'build', '**'), path('**', 'build-*', '**'), path('**', 'bin', '**')
 		}
 		setEncoding('utf-8')
@@ -197,5 +197,3 @@ tasks.register('generateZombieParser', JavaExec) {
 			// "--verbose"
 	]
 }
-
-tasks.compileJava.dependsOn(generateZombieParser)
