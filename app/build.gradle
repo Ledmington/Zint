@@ -109,7 +109,8 @@ spotless {
 
 	java {
 		target fileTree('.') {
-			include path('app', '**', '*.java')
+			include path('**', '*.java')
+			exclude path('gen', '*.java')
 			exclude path('**', 'build', '**'), path('**', 'build-*', '**'), path('**', 'bin', '**')
 		}
 		setEncoding('utf-8')
@@ -177,7 +178,7 @@ tasks.build.dependsOn(fatJar)
 tasks.register('downloadParserGenerator', Download) {
 	group = 'utilities'
 	description = 'Downloads the Parser Generator from GitHub'
-	src "https://github.com/Ledmington/parser_generator/releases/download/snapshot-2025-07-12-54e63f9/parser-gen-cli-0.1.0.jar"
+	src "https://github.com/Ledmington/parser_generator/releases/download/snapshot-2025-07-13-72f6c13/parser-gen-cli-0.1.0.jar"
 	dest new File(project.layout.buildDirectory.get().toString(), "parser-generator.jar")
 	overwrite false
 	acceptAnyCertificate false
@@ -192,6 +193,7 @@ tasks.register('generateZombieParser', JavaExec) {
 			"-g", path(project.layout.projectDirectory.toString(), "src", "main", "resources", "zombie.g"),
 			"-o", path(project.layout.projectDirectory.toString(), "src", "main", "java", "com", "ledmington", "zint", "gen", "ZombieParser.java"),
 			"-p", "com.ledmington.zint.gen",
+			"--overwrite",
 			// "--verbose"
 	]
 }
