@@ -19,8 +19,12 @@ String appDescription = 'ZOMBIE interpreter'
 String author = 'Filippo Barbari'
 String authorMail = 'filippo.barbari@gmail.com'
 String appName = 'Zint'
-String appNameLowercase = 'zint'
+String appNameLowerCase = 'zint'
 String mainClassName = "${group}.Zint"
+
+String fatJarBaseName = "${appNameLowerCase}"
+String fatJarName = "${fatJarBaseName}.jar"
+String fatJarPath = path("${project.layout.buildDirectory.get().toString()}", "libs", "${fatJarName}")
 
 ext.palantirVersion = '2.70.0'
 
@@ -122,7 +126,7 @@ spotless {
 		licenseHeader String.join("\n",
 				"/*",
 				" * ${appName} - ${appDescription}",
-				" * Copyright (C) 2025-${new Date().format('yyyy')} ${author} <${authorMail}>",
+				" * Copyright (C) 2022-${new Date().format('yyyy')} ${author} <${authorMail}>",
 				" *",
 				" * This program is free software: you can redistribute it and/or modify",
 				" * it under the terms of the GNU General Public License as published by",
@@ -141,10 +145,9 @@ spotless {
 	}
 }
 
-String fatJarName = "${buildDir}/libs/${appNameLowercase}-${version}.jar"
-tasks.register('buildFatJar', Jar) {
-	group 'distribution'
-	description 'Builds the fat jar of the application'
+tasks.register('fatJar', Jar) {
+	group = 'distribution'
+	description = 'Builds the fat jar of the application'
 	from sourceSets.main.output
 	dependsOn configurations.runtimeClasspath
 	from {
@@ -152,18 +155,20 @@ tasks.register('buildFatJar', Jar) {
 	}
 	duplicatesStrategy = DuplicatesStrategy.INCLUDE
 	manifest {
-		archiveBaseName = appNameLowercase
+		archiveBaseName = appNameLowerCase
 		attributes(
-				//"Implementation-Title": "Gradle",
-				"Implementation-Version": version,
+				// "Implementation-Title": "Gradle",
+				"Implementation-Version": "${version}",
 				"Main-Class": "$mainClassName"
 		)
 	}
+	archiveBaseName = "${fatJarBaseName}"
 
 	doLast {
-		println "The fat jar is ${fatJarName}"
-		println String.format("Fat jar size: %.3f MB", new File(fatJarName).length() / 1_000_000)
+		printf "The fat jar is %s\n", fatJarPath
+		printf "Fat jar size: %.3f MB\n", new File(fatJarPath).length() / 1_000_000L
 	}
 }
 
+tasks.build.dependsOn(fatJar)
 tasks.compileJava.dependsOn(spotlessApply)
