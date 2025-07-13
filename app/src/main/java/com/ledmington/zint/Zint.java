@@ -10,37 +10,14 @@ package com.ledmington.zint;
 
 import java.util.Arrays;
 
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTree;
+import com.ledmington.zint.gen.ZombieParser;
+import com.ledmington.zint.gen.ZombieParser.Node;
 
-import com.ledmington.zint.ast.Node;
 
-import gen.zombieLexer;
-import gen.zombieParser;
-
-public class Zint {
-
+public final class Zint {
     public static void main(final String[] args) {
-        Arrays.stream(args).forEach(System.out::println);
-
-        final Node ast = getAST("banana is a zombie summon remember 12 bind");
-    }
-
-    public static Node getAST(final String code) {
-        final CharStream chars = CharStreams.fromString(code);
-        final zombieLexer lexer = new zombieLexer(chars);
-        final CommonTokenStream tokens = new CommonTokenStream(lexer);
-        for (Token token : tokens.getTokens()) {
-            System.out.println(token);
-        }
-        final zombieParser parser = new zombieParser(tokens);
-
-        final ParseTree st = parser.prog();
-
-        final ZintVisitor visitor = new ZintVisitor();
-        return visitor.visit(st);
+        final ZombieParser parser = new ZombieParser();
+        final Node ast = parser.parse("banana is a zombie summon remember 12 bind");
+        System.out.println(ast);
     }
 }
