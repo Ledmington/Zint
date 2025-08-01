@@ -109,8 +109,7 @@ spotless {
 
 	java {
 		target fileTree('.') {
-			include path('**', '*.java')
-			exclude path('**', 'gen', '*.java')
+			include path('app', '**', '*.java')
 			exclude path('**', 'build', '**'), path('**', 'build-*', '**'), path('**', 'bin', '**')
 		}
 		setEncoding('utf-8')
@@ -160,7 +159,6 @@ tasks.register('fatJar', Jar) {
 	manifest {
 		archiveBaseName = appNameLowerCase
 		attributes(
-				// "Implementation-Title": "Gradle",
 				"Implementation-Version": "${version}",
 				"Main-Class": "$mainClassName"
 		)
@@ -178,7 +176,7 @@ tasks.build.dependsOn(fatJar)
 tasks.register('downloadParserGenerator', Download) {
 	group = 'utilities'
 	description = 'Downloads the Parser Generator from GitHub'
-	src "https://github.com/Ledmington/parser_generator/releases/download/snapshot-2025-07-13-72f6c13/parser-gen-cli-0.1.0.jar"
+	src "https://github.com/Ledmington/parser_generator/releases/download/snapshot-2025-08-01-ee95a20/parser-gen-cli-0.1.0.jar"
 	dest new File(project.layout.buildDirectory.get().toString(), "parser-generator.jar")
 	overwrite false
 	acceptAnyCertificate false
