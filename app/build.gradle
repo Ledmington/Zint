@@ -14,7 +14,7 @@ static def path(String... args) {
 }
 
 group 'com.ledmington.zint'
-version '0.1.0'
+String version = '0.1.0'
 String appDescription = 'ZOMBIE interpreter'
 String author = 'Filippo Barbari'
 String authorMail = 'filippo.barbari@gmail.com'
@@ -22,7 +22,7 @@ String appName = 'Zint'
 String appNameLowerCase = 'zint'
 String mainClassName = "${group}.Zint"
 
-String fatJarBaseName = "${appNameLowerCase}"
+String fatJarBaseName = "${appNameLowerCase}-${version}"
 String fatJarName = "${fatJarBaseName}.jar"
 String fatJarPath = path("${project.layout.buildDirectory.get().toString()}", "libs", "${fatJarName}")
 
