@@ -19,6 +19,7 @@ package com.ledmington.zint;
 
 import com.ledmington.zint.gen.ZombieParser;
 import com.ledmington.zint.gen.ZombieParser.Node;
+import com.ledmington.zint.gen.ZombieParser.NonTerminal;
 import com.ledmington.zint.gen.ZombieParser.OneOrMore;
 import com.ledmington.zint.gen.ZombieParser.Or;
 import com.ledmington.zint.gen.ZombieParser.Sequence;
@@ -34,13 +35,17 @@ public final class Zint {
 		final char joint = '├';
 		final char angle = '└';
 		switch (n) {
-			case Terminal t -> System.out.println(indent + t);
+			case Terminal t -> System.out.println(indent + "Terminal '"+t.literal()+"'");
+			case NonTerminal nt -> {
+				System.out.println(indent + nt.name());
+				printNode(nt.match(), continuationIndent + " " + angle + horizontalLine, continuationIndent + "   ");
+			}
 			case Or or -> {
-				System.out.println(indent + "Or");
-				printNode(or.inner(), continuationIndent + " " + angle + horizontalLine, continuationIndent + "   ");
+				System.out.println(indent + or.name());
+				printNode(or.match(), continuationIndent + " " + angle + horizontalLine, continuationIndent + "   ");
 			}
 			case Sequence s -> {
-				System.out.println(indent + "Sequence");
+				System.out.println(indent + s.name());
 				final List<Node> children = s.nodes();
 				final int len = children.size();
 				for (int i = 0; i < len - 1; i++) {
@@ -49,7 +54,7 @@ public final class Zint {
 				printNode(children.getLast(), continuationIndent + " " + angle + horizontalLine, continuationIndent + "   ");
 			}
 			case OneOrMore oom -> {
-				System.out.println(indent + "OneOrMore");
+				System.out.println(indent + oom.name());
 				final List<Node> children = oom.nodes();
 				final int len = children.size();
 				for (int i = 0; i < len - 1; i++) {
