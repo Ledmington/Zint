@@ -99,6 +99,11 @@ public final class Zint {
 
 		final ZombieParser parser = new ZombieParser();
 		final com.ledmington.zint.gen.ZombieParser.Node raw = parser.parse(code);
+		if (raw == null) {
+			System.out.println("Error: could not parse.");
+			System.exit(-1);
+			return;
+		}
 		printNode(raw, "", "");
 		final com.ledmington.zint.ast.Node ast = Converter.convertToAST(raw);
 		System.out.println(ast);
