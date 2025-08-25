@@ -17,14 +17,17 @@
  */
 package com.ledmington.zint;
 
-import com.ledmington.zint.gen.ZombieParser;
 import com.ledmington.zint.gen.ZombieParser.Node;
+import com.ledmington.zint.gen.ZombieParser;
 import com.ledmington.zint.gen.ZombieParser.NonTerminal;
 import com.ledmington.zint.gen.ZombieParser.OneOrMore;
 import com.ledmington.zint.gen.ZombieParser.Or;
 import com.ledmington.zint.gen.ZombieParser.Sequence;
 import com.ledmington.zint.gen.ZombieParser.Terminal;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public final class Zint {
@@ -68,9 +71,23 @@ public final class Zint {
 	}
 
 	public static void main(final String[] args) {
-		final ZombieParser parser = new ZombieParser();
-		final Node ast = parser.parse("banana is a zombie summon remember 12 bind");
+		if(args.length !=1) {
+			System.out.println("Usage: zombie <input_file>");
+			System.exit(0);return;
+		}
 
-		printNode(ast, "", "");
+		final String inputFile=args[0];
+		final String code;
+		try {
+			code = Files.readString(Path.of(inputFile));
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		final ZombieParser parser = new ZombieParser();
+		final com.ledmington.zint.gen.ZombieParser.Node raw = parser.parse(code);
+		printNode(raw, "", "");
+		final com.ledmington.zint.ast.Node ast=Converter.convertToAST(raw);
+		System.out.println(ast);
 	}
 }

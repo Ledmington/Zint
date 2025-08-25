@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.ledmington.zint.ast.EntityType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -30,11 +31,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.ledmington.zint.Zint;
-import com.ledmington.zint.ast.EntityType;
-import com.ledmington.zint.ast.ForgetNode;
-import com.ledmington.zint.ast.InstructionNode;
-import com.ledmington.zint.ast.ProgNode;
-import com.ledmington.zint.ast.RememberNode;
 
 public class TestEntityDeclaration {
 
