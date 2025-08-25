@@ -3,7 +3,7 @@ plugins {
 	id 'java'
 	id 'java-library'
 	id 'pmd'
-	id 'com.adarshr.test-logger' version '3.2.0'
+	id 'com.adarshr.test-logger' version '4.0.0'
 	id 'com.diffplug.spotless' version '7.0.4'
 	id 'com.github.ben-manes.versions' version '0.46.0'
 	id 'de.undercouch.download' version '5.3.1'
@@ -26,7 +26,6 @@ String fatJarBaseName = "${appNameLowerCase}-${version}"
 String fatJarName = "${fatJarBaseName}.jar"
 String fatJarPath = path("${project.layout.buildDirectory.get().toString()}", "libs", "${fatJarName}")
 
-ext.junitVersion = '5.9.2'
 ext.palantirVersion = '2.73.0'
 
 java {
@@ -41,9 +40,9 @@ repositories {
 
 dependencies {
 	// testing stuff
-	testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-	testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
-	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testImplementation platform("org.junit:junit-bom:5.10.3")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
 
 tasks.withType(JavaCompile).configureEach {
