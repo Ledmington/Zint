@@ -13,7 +13,7 @@ static def path(String... args) {
 	return String.join(File.separator, args)
 }
 
-group 'com.ledmington.zint'
+group = 'com.ledmington.zint'
 String version = '0.1.0'
 String appDescription = 'ZOMBIE interpreter'
 String author = 'Filippo Barbari'
