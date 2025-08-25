@@ -108,10 +108,7 @@ spotless {
 	}
 
 	java {
-		target fileTree('.') {
-			include path('app', '**', '*.java')
-			exclude path('**', 'build', '**'), path('**', 'build-*', '**'), path('**', 'bin', '**')
-		}
+        target sourceSets.main.allJava
 		setEncoding('utf-8')
 		removeUnusedImports()
 		palantirJavaFormat("${palantirVersion}").formatJavadoc(true)

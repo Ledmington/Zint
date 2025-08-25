@@ -17,18 +17,18 @@
  */
 package com.ledmington.zint;
 
-import com.ledmington.zint.gen.ZombieParser.Node;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
 import com.ledmington.zint.gen.ZombieParser;
+import com.ledmington.zint.gen.ZombieParser.Node;
 import com.ledmington.zint.gen.ZombieParser.NonTerminal;
 import com.ledmington.zint.gen.ZombieParser.OneOrMore;
 import com.ledmington.zint.gen.ZombieParser.Or;
 import com.ledmington.zint.gen.ZombieParser.Sequence;
 import com.ledmington.zint.gen.ZombieParser.Terminal;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
 
 public final class Zint {
 
@@ -38,7 +38,7 @@ public final class Zint {
 		final char joint = '├';
 		final char angle = '└';
 		switch (n) {
-			case Terminal t -> System.out.println(indent + "Terminal '"+t.literal()+"'");
+			case Terminal t -> System.out.println(indent + "Terminal '" + t.literal() + "'");
 			case NonTerminal nt -> {
 				System.out.println(indent + nt.name());
 				printNode(nt.match(), continuationIndent + " " + angle + horizontalLine, continuationIndent + "   ");
@@ -52,18 +52,30 @@ public final class Zint {
 				final List<Node> children = s.nodes();
 				final int len = children.size();
 				for (int i = 0; i < len - 1; i++) {
-					printNode(children.get(i), continuationIndent + " " + joint + horizontalLine, continuationIndent + ' ' + verticalLine + ' ');
+					printNode(
+							children.get(i),
+							continuationIndent + " " + joint + horizontalLine,
+							continuationIndent + ' ' + verticalLine + ' ');
 				}
-				printNode(children.getLast(), continuationIndent + " " + angle + horizontalLine, continuationIndent + "   ");
+				printNode(
+						children.getLast(),
+						continuationIndent + " " + angle + horizontalLine,
+						continuationIndent + "   ");
 			}
 			case OneOrMore oom -> {
 				System.out.println(indent + oom.name());
 				final List<Node> children = oom.nodes();
 				final int len = children.size();
 				for (int i = 0; i < len - 1; i++) {
-					printNode(children.get(i), continuationIndent + " " + joint + horizontalLine, continuationIndent + ' ' + verticalLine + ' ');
+					printNode(
+							children.get(i),
+							continuationIndent + " " + joint + horizontalLine,
+							continuationIndent + ' ' + verticalLine + ' ');
 				}
-				printNode(children.getLast(), continuationIndent + " " + angle + horizontalLine, continuationIndent + "   ");
+				printNode(
+						children.getLast(),
+						continuationIndent + " " + angle + horizontalLine,
+						continuationIndent + "   ");
 			}
 			case null -> System.out.println(indent + "null");
 			default -> throw new IllegalArgumentException(String.format("Unknown node: '%s'.", n));
@@ -71,12 +83,13 @@ public final class Zint {
 	}
 
 	public static void main(final String[] args) {
-		if(args.length !=1) {
+		if (args.length != 1) {
 			System.out.println("Usage: zombie <input_file>");
-			System.exit(0);return;
+			System.exit(0);
+			return;
 		}
 
-		final String inputFile=args[0];
+		final String inputFile = args[0];
 		final String code;
 		try {
 			code = Files.readString(Path.of(inputFile));
@@ -87,7 +100,7 @@ public final class Zint {
 		final ZombieParser parser = new ZombieParser();
 		final com.ledmington.zint.gen.ZombieParser.Node raw = parser.parse(code);
 		printNode(raw, "", "");
-		final com.ledmington.zint.ast.Node ast=Converter.convertToAST(raw);
+		final com.ledmington.zint.ast.Node ast = Converter.convertToAST(raw);
 		System.out.println(ast);
 	}
 }
