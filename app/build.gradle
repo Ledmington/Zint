@@ -109,7 +109,7 @@ spotless {
 	}
 
 	java {
-        target sourceSets.main.allJava
+        target sourceSets.main.allJava, sourceSets.test.allJava
 		setEncoding('utf-8')
 		removeUnusedImports()
 		palantirJavaFormat("${palantirVersion}").formatJavadoc(true)
