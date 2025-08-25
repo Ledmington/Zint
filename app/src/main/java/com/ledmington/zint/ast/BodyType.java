@@ -17,7 +17,10 @@
  */
 package com.ledmington.zint.ast;
 
-import java.util.List;
-
-public record EntityDeclaration(String name, EntityType entityType, BodyType bodyType, List<Instruction> instructions)
-		implements Node {}
+public enum BodyType {
+	SUMMON_ANIMATE,
+	SUMMON_BIND,
+	SUMMON_DISTURB,
+	TASK_ANIMATE,
+	TASK_BIND
+}

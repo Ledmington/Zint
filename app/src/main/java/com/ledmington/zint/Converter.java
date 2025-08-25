@@ -18,15 +18,22 @@
 package com.ledmington.zint;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.ledmington.zint.ast.BodyType;
 import com.ledmington.zint.ast.EntityDeclaration;
 import com.ledmington.zint.ast.EntityType;
+import com.ledmington.zint.ast.Instruction;
 import com.ledmington.zint.ast.Node;
 import com.ledmington.zint.ast.Program;
+import com.ledmington.zint.ast.Remember;
 import com.ledmington.zint.gen.ZombieParser;
+import com.ledmington.zint.gen.ZombieParser.Terminal;
 import com.ledmington.zint.gen.ZombieParser.entityDeclaration;
+import com.ledmington.zint.gen.ZombieParser.instruction;
 import com.ledmington.zint.gen.ZombieParser.prog;
 import com.ledmington.zint.gen.ZombieParser.progbody;
+import com.ledmington.zint.gen.ZombieParser.sequence_13;
 
 public final class Converter {
 
@@ -48,13 +55,43 @@ public final class Converter {
 	}
 
 	private static EntityDeclaration convertEntityDeclaration(final entityDeclaration ed) {
-		return new EntityDeclaration(
-				((ZombieParser.sequence_0) ed.or_0_0().match()).ID_0().literal(),
-				switch (((ZombieParser.sequence_0) ed.or_0_0().match())
-						.ZOMBIE_3()
-						.literal()) {
+		final String name =
+				((ZombieParser.sequence_0) ed.or_0_0().match()).ID_0().literal();
+		final String entityTypeString =
+				((ZombieParser.sequence_0) ed.or_0_0().match()).ZOMBIE_3().literal();
+		final EntityType entityType =
+				switch (entityTypeString) {
 					case "zombie" -> EntityType.ZOMBIE;
-					default -> throw new IllegalArgumentException("Unknown entity type.");
-				});
+					default ->
+						throw new IllegalArgumentException(
+								String.format("Unknown entity type: '%s'.", entityTypeString));
+				};
+		final String bodyTypeString = ((ZombieParser.sequence_9) ed.or_1_0().match())
+						.SUMMON_0()
+						.literal() + " "
+				+ ((ZombieParser.sequence_9) ed.or_1_0().match()).BIND_1().literal();
+		final BodyType bodyType =
+				switch (bodyTypeString) {
+					case "summon animate" -> BodyType.SUMMON_ANIMATE;
+					case "summon bind" -> BodyType.SUMMON_BIND;
+					default ->
+						throw new IllegalArgumentException(String.format("Unknown body type: '%s'.", bodyTypeString));
+				};
+		final List<Instruction> instructions = ((ZombieParser.sequence_9)
+						ed.or_1_0().match())
+				.one_or_more_1_0().instruction().stream()
+						.map(Converter::convertInstruction)
+						.toList();
+		return new EntityDeclaration(name, entityType, bodyType, instructions);
+	}
+
+	private static Instruction convertInstruction(final instruction n) {
+		final sequence_13 inst = ((sequence_13) n.match());
+		return switch (inst.REMEMBER_0().literal()) {
+			case "remember" ->
+				new Remember(Integer.parseInt(
+						inst.number_0().DIGIT().stream().map(Terminal::literal).collect(Collectors.joining())));
+			default -> throw new IllegalArgumentException(String.format("Unknown instruction type: '%s'.", inst));
+		};
 	}
 }

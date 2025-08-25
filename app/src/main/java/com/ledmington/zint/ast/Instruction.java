@@ -17,7 +17,4 @@
  */
 package com.ledmington.zint.ast;
 
-import java.util.List;
-
-public record EntityDeclaration(String name, EntityType entityType, BodyType bodyType, List<Instruction> instructions)
-		implements Node {}
+public interface Instruction {}
