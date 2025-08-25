@@ -44,7 +44,31 @@ public final class TestConversion {
 				Arguments.of(
 						"banana is an enslaved undead summon remember 12 bind",
 						new Program(List.of(new EntityDeclaration(
-								"banana", EntityType.ZOMBIE, BodyType.SUMMON_BIND, List.of(new Remember(12)))))));
+								"banana", EntityType.ZOMBIE, BodyType.SUMMON_BIND, List.of(new Remember(12)))))),
+				Arguments.of(
+						"banana is a ghost summon remember 12 bind",
+						new Program(List.of(new EntityDeclaration(
+								"banana", EntityType.GHOST, BodyType.SUMMON_BIND, List.of(new Remember(12)))))),
+				Arguments.of(
+						"banana is a restless undead summon remember 12 bind",
+						new Program(List.of(new EntityDeclaration(
+								"banana", EntityType.GHOST, BodyType.SUMMON_BIND, List.of(new Remember(12)))))),
+				Arguments.of(
+						"banana is a vampire summon remember 12 bind",
+						new Program(List.of(new EntityDeclaration(
+								"banana", EntityType.VAMPIRE, BodyType.SUMMON_BIND, List.of(new Remember(12)))))),
+				Arguments.of(
+						"banana is a free-willed undead summon remember 12 bind",
+						new Program(List.of(new EntityDeclaration(
+								"banana", EntityType.VAMPIRE, BodyType.SUMMON_BIND, List.of(new Remember(12)))))),
+				Arguments.of(
+						"banana is a demon summon remember 12 bind",
+						new Program(List.of(new EntityDeclaration(
+								"banana", EntityType.DEMON, BodyType.SUMMON_BIND, List.of(new Remember(12)))))),
+				Arguments.of(
+						"banana is a djinn summon remember 12 bind",
+						new Program(List.of(new EntityDeclaration(
+								"banana", EntityType.DJINN, BodyType.SUMMON_BIND, List.of(new Remember(12)))))));
 	}
 
 	@ParameterizedTest

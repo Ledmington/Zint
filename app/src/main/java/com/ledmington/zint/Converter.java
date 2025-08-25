@@ -24,10 +24,10 @@ import com.ledmington.zint.ast.BodyType;
 import com.ledmington.zint.ast.EntityDeclaration;
 import com.ledmington.zint.ast.EntityType;
 import com.ledmington.zint.ast.Instruction;
-import com.ledmington.zint.ast.Node;
 import com.ledmington.zint.ast.Program;
 import com.ledmington.zint.ast.Remember;
 import com.ledmington.zint.gen.ZombieParser;
+import com.ledmington.zint.gen.ZombieParser.Node;
 import com.ledmington.zint.gen.ZombieParser.Terminal;
 import com.ledmington.zint.gen.ZombieParser.entityDeclaration;
 import com.ledmington.zint.gen.ZombieParser.instruction;
@@ -37,14 +37,14 @@ import com.ledmington.zint.gen.ZombieParser.sequence_13;
 
 public final class Converter {
 
-	public static Node convertToAST(final ZombieParser.Node raw) {
+	public static Program convertToAST(final ZombieParser.Node raw) {
 		if (raw instanceof final prog p) {
 			return convertProg(p);
 		}
 		throw new IllegalArgumentException("Could not convert given node.");
 	}
 
-	private static Node convertProg(final prog p) {
+	private static Program convertProg(final prog p) {
 		return new Program(convertProgBody(p.progbody()));
 	}
 
@@ -55,13 +55,51 @@ public final class Converter {
 	}
 
 	private static EntityDeclaration convertEntityDeclaration(final entityDeclaration ed) {
-		final String name =
-				((ZombieParser.sequence_0) ed.or_0_0().match()).ID_0().literal();
-		final String entityTypeString =
-				((ZombieParser.sequence_0) ed.or_0_0().match()).ZOMBIE_3().literal();
+		final Node decl = ed.or_0_0().match();
+		final String name;
+		final String entityTypeString;
+		switch (decl) {
+			case ZombieParser.sequence_0 s -> {
+				name = s.ID_0().literal();
+				entityTypeString = s.ZOMBIE_3().literal();
+			}
+			case ZombieParser.sequence_1 s -> {
+				name = s.ID_0().literal();
+				entityTypeString = s.ENSLAVED_UNDEAD_3().literal();
+			}
+			case ZombieParser.sequence_2 s -> {
+				name = s.ID_0().literal();
+				entityTypeString = s.GHOST_3().literal();
+			}
+			case ZombieParser.sequence_3 s -> {
+				name = s.ID_0().literal();
+				entityTypeString = s.RESTLESS_UNDEAD_3().literal();
+			}
+			case ZombieParser.sequence_4 s -> {
+				name = s.ID_0().literal();
+				entityTypeString = s.VAMPIRE_3().literal();
+			}
+			case ZombieParser.sequence_5 s -> {
+				name = s.ID_0().literal();
+				entityTypeString = s.FREE_WILLED_UNDEAD_3().literal();
+			}
+			case ZombieParser.sequence_6 s -> {
+				name = s.ID_0().literal();
+				entityTypeString = s.DEMON_3().literal();
+			}
+			case ZombieParser.sequence_7 s -> {
+				name = s.ID_0().literal();
+				entityTypeString = s.DJINN_3().literal();
+			}
+			default -> throw new IllegalArgumentException(String.format("Unknown entity declaration: '%s'.", decl));
+		}
 		final EntityType entityType =
 				switch (entityTypeString) {
-					case "zombie" -> EntityType.ZOMBIE;
+					case "zombie", "enslaved undead" -> EntityType.ZOMBIE;
+					case "ghost", "restless undead" -> EntityType.GHOST;
+					case "vampire", "free-willed undead" -> EntityType.VAMPIRE;
+					case "demon" -> EntityType.DEMON;
+					case "djinn" -> EntityType.DJINN;
 					default ->
 						throw new IllegalArgumentException(
 								String.format("Unknown entity type: '%s'.", entityTypeString));
