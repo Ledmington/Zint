@@ -29,6 +29,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.ledmington.zint.ast.BodyType;
 import com.ledmington.zint.ast.EntityDeclaration;
 import com.ledmington.zint.ast.EntityType;
+import com.ledmington.zint.ast.Forget;
 import com.ledmington.zint.ast.Program;
 import com.ledmington.zint.ast.Remember;
 import com.ledmington.zint.gen.ZombieParser;
@@ -68,7 +69,11 @@ public final class TestConversion {
 				Arguments.of(
 						"banana is a djinn summon remember 12 bind",
 						new Program(List.of(new EntityDeclaration(
-								"banana", EntityType.DJINN, BodyType.SUMMON_BIND, List.of(new Remember(12)))))));
+								"banana", EntityType.DJINN, BodyType.SUMMON_BIND, List.of(new Remember(12)))))),
+				Arguments.of(
+						"banana is a zombie summon forget bind",
+						new Program(List.of(new EntityDeclaration(
+								"banana", EntityType.ZOMBIE, BodyType.SUMMON_BIND, List.of(new Forget()))))));
 	}
 
 	@ParameterizedTest

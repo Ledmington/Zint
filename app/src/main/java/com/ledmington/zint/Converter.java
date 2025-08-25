@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import com.ledmington.zint.ast.BodyType;
 import com.ledmington.zint.ast.EntityDeclaration;
 import com.ledmington.zint.ast.EntityType;
+import com.ledmington.zint.ast.Forget;
 import com.ledmington.zint.ast.Instruction;
 import com.ledmington.zint.ast.Program;
 import com.ledmington.zint.ast.Remember;
@@ -33,7 +34,6 @@ import com.ledmington.zint.gen.ZombieParser.entityDeclaration;
 import com.ledmington.zint.gen.ZombieParser.instruction;
 import com.ledmington.zint.gen.ZombieParser.prog;
 import com.ledmington.zint.gen.ZombieParser.progbody;
-import com.ledmington.zint.gen.ZombieParser.sequence_13;
 
 public final class Converter {
 
@@ -124,12 +124,12 @@ public final class Converter {
 	}
 
 	private static Instruction convertInstruction(final instruction n) {
-		final sequence_13 inst = ((sequence_13) n.match());
-		return switch (inst.REMEMBER_0().literal()) {
-			case "remember" ->
+		return switch (n.match()) {
+			case ZombieParser.sequence_13 s ->
 				new Remember(Integer.parseInt(
-						inst.number_0().DIGIT().stream().map(Terminal::literal).collect(Collectors.joining())));
-			default -> throw new IllegalArgumentException(String.format("Unknown instruction type: '%s'.", inst));
+						s.number_0().DIGIT().stream().map(Terminal::literal).collect(Collectors.joining())));
+			case ZombieParser.Terminal ignored -> new Forget();
+			default -> throw new IllegalArgumentException(String.format("Unknown instruction type: '%s'.", n.match()));
 		};
 	}
 }
