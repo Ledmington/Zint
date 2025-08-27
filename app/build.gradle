@@ -172,7 +172,7 @@ tasks.build.dependsOn(fatJar)
 tasks.register('downloadParserGenerator', Download) {
 	group = 'utilities'
 	description = 'Downloads the Parser Generator from GitHub'
-	src "https://github.com/Ledmington/parser_generator/releases/download/snapshot-2025-08-25-e25ae33/parser-gen-cli-0.1.0.jar"
+	src "https://github.com/Ledmington/parser_generator/releases/download/snapshot-2025-08-27-ac0144f/parser-gen-cli-0.1.0.jar"
 	dest new File(project.layout.buildDirectory.get().toString(), "parser-generator.jar")
 	overwrite false
 	acceptAnyCertificate false
