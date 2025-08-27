@@ -61,7 +61,7 @@ public final class Converter {
 	}
 
 	private static EntityDeclaration convertEntityDeclaration(final entityDeclaration ed) {
-		final String name = ed.entityNameAndType_0().ID_0().literal();
+		final String name = ed.entityNameAndType().ID_0().literal();
 		final String entityTypeString = getEntityTypeString(ed);
 		final EntityType entityType =
 				switch (entityTypeString) {
@@ -75,11 +75,11 @@ public final class Converter {
 								String.format("Unknown entity type: '%s'.", entityTypeString));
 				};
 
-		return new EntityDeclaration(name, entityType, convertEntityBody(ed.entityBody_0()));
+		return new EntityDeclaration(name, entityType, convertEntityBody(ed.entityBody()));
 	}
 
 	private static String getEntityTypeString(final entityDeclaration ed) {
-		final Node decl = ed.entityNameAndType_0().or_0_0().match();
+		final Node decl = ed.entityNameAndType().or_0().match();
 		return switch (decl) {
 			case sequence_5 s -> s.ZOMBIE_1().literal();
 			case sequence_6 s -> s.ENSLAVED_UNDEAD_1().literal();
@@ -99,23 +99,23 @@ public final class Converter {
 		switch (entityBody.match()) {
 			case ZombieParser.sequence_0 s -> {
 				type = BodyType.SUMMON_ANIMATE;
-				inst = s.one_or_more_0_0().instruction();
+				inst = s.one_or_more_0().instruction();
 			}
 			case ZombieParser.sequence_1 s -> {
 				type = BodyType.SUMMON_BIND;
-				inst = s.one_or_more_1_0().instruction();
+				inst = s.one_or_more_1().instruction();
 			}
 			case ZombieParser.sequence_2 s -> {
 				type = BodyType.SUMMON_DISTURB;
-				inst = s.one_or_more_2_0().instruction();
+				inst = s.one_or_more_2().instruction();
 			}
 			case ZombieParser.sequence_3 s -> {
 				type = BodyType.TASK_ANIMATE;
-				inst = s.one_or_more_3_0().instruction();
+				inst = s.one_or_more_3().instruction();
 			}
 			case ZombieParser.sequence_4 s -> {
 				type = BodyType.TASK_BIND;
-				inst = s.one_or_more_4_0().instruction();
+				inst = s.one_or_more_4().instruction();
 			}
 			default -> throw new IllegalStateException(String.format("Unknown body type: '%s'.", entityBody.match()));
 		}
@@ -128,7 +128,7 @@ public final class Converter {
 		return switch (n.match()) {
 			case sequence_13 s ->
 				new Remember(Integer.parseInt(
-						s.number_0().DIGIT().stream().map(Terminal::literal).collect(Collectors.joining())));
+						s.number().DIGIT().stream().map(Terminal::literal).collect(Collectors.joining())));
 			case Terminal ignored -> new Forget();
 			default -> throw new IllegalArgumentException(String.format("Unknown instruction type: '%s'.", n.match()));
 		};
