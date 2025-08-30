@@ -61,7 +61,9 @@ public final class Converter {
 	}
 
 	private static EntityDeclaration convertEntityDeclaration(final entityDeclaration ed) {
-		final String name = ed.entityNameAndType().ID_0().literal();
+		final String name = ed.entityNameAndType().id().LETTER().stream()
+				.map(Terminal::literal)
+				.collect(Collectors.joining());
 		final String entityTypeString = getEntityTypeString(ed);
 		final EntityType entityType =
 				switch (entityTypeString) {
@@ -81,14 +83,14 @@ public final class Converter {
 	private static String getEntityTypeString(final entityDeclaration ed) {
 		final Node decl = ed.entityNameAndType().or_0().match();
 		return switch (decl) {
-			case sequence_5 s -> s.ZOMBIE_1().literal();
-			case sequence_6 s -> s.ENSLAVED_UNDEAD_1().literal();
-			case sequence_7 s -> s.GHOST_1().literal();
-			case sequence_8 s -> s.RESTLESS_UNDEAD_1().literal();
-			case sequence_9 s -> s.VAMPIRE_1().literal();
-			case sequence_10 s -> s.FREE_WILLED_UNDEAD_1().literal();
-			case sequence_11 s -> s.DEMON_1().literal();
-			case sequence_12 s -> s.DJINN_1().literal();
+			case sequence_5 s -> s.ZOMBIE().literal();
+			case sequence_6 s -> s.ENSLAVED_UNDEAD().literal();
+			case sequence_7 s -> s.GHOST().literal();
+			case sequence_8 s -> s.RESTLESS_UNDEAD().literal();
+			case sequence_9 s -> s.VAMPIRE().literal();
+			case sequence_10 s -> s.FREE_WILLED_UNDEAD().literal();
+			case sequence_11 s -> s.DEMON().literal();
+			case sequence_12 s -> s.DJINN().literal();
 			default -> throw new IllegalArgumentException(String.format("Unknown entity declaration: '%s'.", decl));
 		};
 	}
