@@ -15,16 +15,40 @@ entityBody = SUMMON instruction+ ANIMATE
            | TASK ID instruction+ ANIMATE
            | TASK ID instruction+ BIND ;
 instruction = FORGET
+            | BANISH
+            | INVOKE
+            | MOAN
+            | STUMBLE
+            | REND
+            | TURN
             | REMEMBER NUMBER
             | SAY STRING_LITERAL
+            | REMEMBERING ID
+            | SHAMBLE instruction+ UNTIL ID
+            | SHAMBLE instruction+ AROUND
+            | TASTE ID GOOD instruction+ BAD instruction+ SPIT
             | TASK ID instruction+ ANIMATE ;
 
 IS = "is";
 A = "a";
 AN = "an";
 REMEMBER = "remember";
+REMEMBERING = "remembering";
 FORGET = "forget";
 SAY = "say";
+BANISH = "banish";
+INVOKE = "invoke";
+MOAN = "moan";
+SHAMBLE = "shamble";
+UNTIL = "until";
+AROUND = "around";
+STUMBLE = "stumble";
+TASTE = "taste";
+GOOD = "good";
+BAD = "bad";
+SPIT = "spit";
+REND = "rend";
+TURN = "turn";
 
 ZOMBIE = "zombie";
 GHOST = "ghost";

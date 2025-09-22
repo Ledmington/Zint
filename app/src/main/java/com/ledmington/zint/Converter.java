@@ -41,7 +41,7 @@ import com.ledmington.zint.gen.ZombieParser.sequence_11;
 import com.ledmington.zint.gen.ZombieParser.sequence_12;
 import com.ledmington.zint.gen.ZombieParser.sequence_13;
 import com.ledmington.zint.gen.ZombieParser.sequence_14;
-import com.ledmington.zint.gen.ZombieParser.sequence_15;
+import com.ledmington.zint.gen.ZombieParser.sequence_19;
 import com.ledmington.zint.gen.ZombieParser.sequence_5;
 import com.ledmington.zint.gen.ZombieParser.sequence_6;
 import com.ledmington.zint.gen.ZombieParser.sequence_7;
@@ -133,10 +133,10 @@ public final class Converter {
 			case sequence_13 s13 -> new Remember(Integer.parseInt(s13.NUMBER().literal()));
 			case sequence_14 s14 ->
 				new Say(trimDoubleQuotes(s14.STRING_LITERAL().literal()));
-			case sequence_15 s15 ->
+			case sequence_19 s19 ->
 				new Task(
-						s15.ID().literal(),
-						s15.one_or_more_5().instruction().stream()
+						s19.ID().literal(),
+						s19.one_or_more_9().instruction().stream()
 								.map(Converter::convertInstruction)
 								.toList());
 			default -> throw new IllegalArgumentException(String.format("Unknown instruction type: '%s'.", n.match()));
