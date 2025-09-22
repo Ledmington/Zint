@@ -27,6 +27,8 @@ import com.ledmington.zint.ast.Forget;
 import com.ledmington.zint.ast.Instruction;
 import com.ledmington.zint.ast.Program;
 import com.ledmington.zint.ast.Remember;
+import com.ledmington.zint.ast.Say;
+import com.ledmington.zint.ast.Task;
 import com.ledmington.zint.gen.ZombieParser;
 import com.ledmington.zint.gen.ZombieParser.Node;
 import com.ledmington.zint.gen.ZombieParser.Terminal;
@@ -38,6 +40,8 @@ import com.ledmington.zint.gen.ZombieParser.sequence_10;
 import com.ledmington.zint.gen.ZombieParser.sequence_11;
 import com.ledmington.zint.gen.ZombieParser.sequence_12;
 import com.ledmington.zint.gen.ZombieParser.sequence_13;
+import com.ledmington.zint.gen.ZombieParser.sequence_14;
+import com.ledmington.zint.gen.ZombieParser.sequence_15;
 import com.ledmington.zint.gen.ZombieParser.sequence_5;
 import com.ledmington.zint.gen.ZombieParser.sequence_6;
 import com.ledmington.zint.gen.ZombieParser.sequence_7;
@@ -125,9 +129,25 @@ public final class Converter {
 
 	private static Instruction convertInstruction(final instruction n) {
 		return switch (n.match()) {
-			case sequence_13 s -> new Remember(Integer.parseInt(s.NUMBER().literal()));
 			case Terminal ignored -> new Forget();
+			case sequence_13 s13 -> new Remember(Integer.parseInt(s13.NUMBER().literal()));
+			case sequence_14 s14 ->
+				new Say(trimDoubleQuotes(s14.STRING_LITERAL().literal()));
+			case sequence_15 s15 ->
+				new Task(
+						s15.ID().literal(),
+						s15.one_or_more_5().instruction().stream()
+								.map(Converter::convertInstruction)
+								.toList());
 			default -> throw new IllegalArgumentException(String.format("Unknown instruction type: '%s'.", n.match()));
 		};
+	}
+
+	private static String trimDoubleQuotes(final String literal) {
+		final int n = literal.length();
+		if (literal.charAt(0) != '"' || literal.charAt(n - 1) != '"') {
+			throw new AssertionError();
+		}
+		return literal.substring(1, n - 1);
 	}
 }

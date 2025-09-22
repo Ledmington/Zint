@@ -34,6 +34,8 @@ import com.ledmington.zint.ast.EntityType;
 import com.ledmington.zint.ast.Forget;
 import com.ledmington.zint.ast.Program;
 import com.ledmington.zint.ast.Remember;
+import com.ledmington.zint.ast.Say;
+import com.ledmington.zint.ast.Task;
 import com.ledmington.zint.gen.ZombieParser;
 import com.ledmington.zint.gen.ZombieParser.Node;
 
@@ -129,7 +131,12 @@ public final class TestConversion {
 								"say \"Hello World!\"",
 								"animate",
 								"animate"),
-						new Program(null)));
+						new Program(List.of(new EntityDeclaration(
+								"HelloWorld",
+								EntityType.ZOMBIE,
+								new EntityBody(
+										BodyType.SUMMON_ANIMATE,
+										List.of(new Task("SayHello", List.of(new Say("Hello World!"))))))))));
 	}
 
 	@ParameterizedTest
