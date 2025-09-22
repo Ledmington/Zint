@@ -18,7 +18,6 @@
 package com.ledmington.zint;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.ledmington.zint.ast.BodyType;
 import com.ledmington.zint.ast.EntityBody;
@@ -61,9 +60,7 @@ public final class Converter {
 	}
 
 	private static EntityDeclaration convertEntityDeclaration(final entityDeclaration ed) {
-		final String name = ed.entityNameAndType().id().LETTER().stream()
-				.map(Terminal::literal)
-				.collect(Collectors.joining());
+		final String name = ed.entityNameAndType().ID().literal();
 		final String entityTypeString = getEntityTypeString(ed);
 		final EntityType entityType =
 				switch (entityTypeString) {
@@ -128,9 +125,7 @@ public final class Converter {
 
 	private static Instruction convertInstruction(final instruction n) {
 		return switch (n.match()) {
-			case sequence_13 s ->
-				new Remember(Integer.parseInt(
-						s.number().DIGIT().stream().map(Terminal::literal).collect(Collectors.joining())));
+			case sequence_13 s -> new Remember(Integer.parseInt(s.NUMBER().literal()));
 			case Terminal ignored -> new Forget();
 			default -> throw new IllegalArgumentException(String.format("Unknown instruction type: '%s'.", n.match()));
 		};

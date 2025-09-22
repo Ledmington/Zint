@@ -1,7 +1,7 @@
 prog = entityDeclaration+ ;
 
 entityDeclaration =	entityNameAndType entityBody;
-entityNameAndType = id IS ( A ZOMBIE
+entityNameAndType = ID IS ( A ZOMBIE
                           | AN ENSLAVED_UNDEAD
                           | A GHOST
                           | A RESTLESS_UNDEAD
@@ -12,16 +12,14 @@ entityNameAndType = id IS ( A ZOMBIE
 entityBody = SUMMON instruction+ ANIMATE
            | SUMMON instruction+ BIND
            | SUMMON instruction+ DISTURB
-           | TASK id instruction+ ANIMATE
-           | TASK id instruction+ BIND ;
+           | TASK ID instruction+ ANIMATE
+           | TASK ID instruction+ BIND ;
 
 instruction = FORGET
-            | REMEMBER number
+            | REMEMBER NUMBER
             | SAY string_literal
-            | TASK id instruction+ ANIMATE ;
-number = DIGIT+ ;
-id = LETTER+ ;
-string_literal = DOUBLE_QUOTE ( LETTER | WHITESPACE | EXCLAMATION_MARK )* DOUBLE_QUOTE ;
+            | TASK ID instruction+ ANIMATE ;
+string_literal = DOUBLE_QUOTE ( LETTER | " " | EXCLAMATION_MARK )* DOUBLE_QUOTE ;
 
 IS = "is";
 A = "a";
@@ -45,7 +43,11 @@ BIND = "bind";
 DISTURB = "disturb";
 TASK = "task";
 
+DOUBLE_QUOTE = "\"" ;
+EXCLAMATION_MARK = "!" ;
+
 DIGIT = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+NUMBER = DIGIT+ ;
 LETTER = "A" | "B" | "C" | "D" | "E" | "F" | "G"
        | "H" | "I" | "J" | "K" | "L" | "M" | "N"
        | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
@@ -54,7 +56,6 @@ LETTER = "A" | "B" | "C" | "D" | "E" | "F" | "G"
        | "j" | "k" | "l" | "m" | "n" | "o" | "p"
        | "q" | "r" | "s" | "t" | "u" | "v" | "w"
        | "x" | "y" | "z" ;
-DOUBLE_QUOTE = "\"" ;
-EXCLAMATION_MARK = "!" ;
+ID = LETTER+ ;
 
-WHITESPACE = ( " " | "\t" | "\n" )+ ;
+_WHITESPACE = ( " " | "\t" | "\n" )+ ;
