@@ -17,4 +17,10 @@
  */
 package com.ledmington.zint.ast;
 
-public record Forget() implements Instruction {}
+import java.util.Optional;
+
+public record Forget(Optional<String> entityName) implements Instruction {
+	public Forget() {
+		this(Optional.empty());
+	}
+}

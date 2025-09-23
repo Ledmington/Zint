@@ -18,6 +18,7 @@
 package com.ledmington.zint;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.ledmington.zint.ast.BodyType;
 import com.ledmington.zint.ast.EntityBody;
@@ -27,8 +28,6 @@ import com.ledmington.zint.ast.Forget;
 import com.ledmington.zint.ast.Instruction;
 import com.ledmington.zint.ast.Program;
 import com.ledmington.zint.ast.Remember;
-import com.ledmington.zint.ast.Say;
-import com.ledmington.zint.ast.Task;
 import com.ledmington.zint.gen.ZombieParser;
 import com.ledmington.zint.gen.ZombieParser.Node;
 import com.ledmington.zint.gen.ZombieParser.Terminal;
@@ -39,8 +38,7 @@ import com.ledmington.zint.gen.ZombieParser.prog;
 import com.ledmington.zint.gen.ZombieParser.sequence_10;
 import com.ledmington.zint.gen.ZombieParser.sequence_11;
 import com.ledmington.zint.gen.ZombieParser.sequence_12;
-import com.ledmington.zint.gen.ZombieParser.sequence_13;
-import com.ledmington.zint.gen.ZombieParser.sequence_14;
+import com.ledmington.zint.gen.ZombieParser.sequence_16;
 import com.ledmington.zint.gen.ZombieParser.sequence_19;
 import com.ledmington.zint.gen.ZombieParser.sequence_5;
 import com.ledmington.zint.gen.ZombieParser.sequence_6;
@@ -129,16 +127,11 @@ public final class Converter {
 
 	private static Instruction convertInstruction(final instruction n) {
 		return switch (n.match()) {
-			case Terminal ignored -> new Forget();
-			case sequence_13 s13 -> new Remember(Integer.parseInt(s13.NUMBER().literal()));
-			case sequence_14 s14 ->
-				new Say(trimDoubleQuotes(s14.STRING_LITERAL().literal()));
-			case sequence_19 s19 ->
-				new Task(
-						s19.ID().literal(),
-						s19.one_or_more_9().instruction().stream()
-								.map(Converter::convertInstruction)
-								.toList());
+			case sequence_16 s16 -> {
+				final Terminal id = s16.zero_or_one_3().ID();
+				yield new Forget(id == null ? Optional.empty() : Optional.of(id.literal()));
+			}
+			case sequence_19 s19 -> new Remember(Integer.parseInt(s19.NUMBER().literal()));
 			default -> throw new IllegalArgumentException(String.format("Unknown instruction type: '%s'.", n.match()));
 		};
 	}

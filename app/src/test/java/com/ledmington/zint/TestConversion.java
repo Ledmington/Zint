@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -121,6 +122,12 @@ public final class TestConversion {
 								"banana",
 								EntityType.ZOMBIE,
 								new EntityBody(BodyType.TASK_BIND, List.of(new Forget())))))),
+				Arguments.of(
+						"example is a vampire summon forget example bind",
+						new Program(List.of(new EntityDeclaration(
+								"example",
+								EntityType.VAMPIRE,
+								new EntityBody(BodyType.SUMMON_BIND, List.of(new Forget(Optional.of("example")))))))),
 				// from documentation
 				Arguments.of(
 						String.join(
@@ -137,6 +144,15 @@ public final class TestConversion {
 								new EntityBody(
 										BodyType.SUMMON_ANIMATE,
 										List.of(new Task("SayHello", List.of(new Say("Hello World!"))))))))),
+				Arguments.of(
+						String.join(
+								" ",
+								"Zombie1 is a zombie summon remember 1 bind",
+								"Zombie2 is a zombie summon remember 2 bind",
+								"example is a zombie summon",
+								"remember Zombie1 moan Zombie1 moan Zombie2",
+								"animate"),
+						new Program(null)),
 				Arguments.of(
 						String.join(
 								" ",

@@ -14,16 +14,19 @@ entityBody = SUMMON instruction+ ANIMATE
            | SUMMON instruction+ DISTURB
            | TASK ID instruction+ ANIMATE
            | TASK ID instruction+ BIND ;
-instruction = FORGET
-            | BANISH
-            | INVOKE
-            | MOAN
-            | STUMBLE
+
+instruction = STUMBLE
             | REND
             | TURN
+            | ANIMATE ID?
+            | BANISH ID?
+            | DISTURB ID?
+            | FORGET ID?
+            | INVOKE ID?
+            | MOAN ID?
             | REMEMBER NUMBER
-            | SAY STRING_LITERAL
-            | REMEMBERING ID
+            | SAY ID? STRING_LITERAL
+            | REMEMBERING ID? ID
             | SHAMBLE instruction+ UNTIL ID
             | SHAMBLE instruction+ AROUND
             | TASTE ID GOOD instruction+ BAD instruction+ SPIT
