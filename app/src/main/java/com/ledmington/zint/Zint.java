@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import com.ledmington.zint.ast.Program;
 import com.ledmington.zint.gen.ZombieParser;
 import com.ledmington.zint.gen.ZombieParser.Node;
 import com.ledmington.zint.gen.ZombieParser.NonTerminal;
@@ -105,7 +106,10 @@ public final class Zint {
 			return;
 		}
 		printNode(raw, "", "");
-		final com.ledmington.zint.ast.Node ast = Converter.convertToAST(raw);
+		final Program ast = Converter.convertToAST(raw);
 		System.out.println(ast);
+
+		// TODO: add better error reporting
+		Checker.check(ast);
 	}
 }
