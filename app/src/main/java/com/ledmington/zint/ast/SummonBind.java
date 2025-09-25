@@ -17,10 +17,10 @@
  */
 package com.ledmington.zint.ast;
 
-public enum BodyType {
-	SUMMON_ANIMATE,
-	SUMMON_BIND,
-	SUMMON_DISTURB,
-	TASK_ANIMATE,
-	TASK_BIND
+import java.util.List;
+
+public record SummonBind(List<EntityStatement> statements) implements EntityStatement {
+	public SummonBind(final EntityStatement... statements) {
+		this(List.of(statements));
+	}
 }

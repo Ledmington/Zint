@@ -17,4 +17,4 @@
  */
 package com.ledmington.zint.ast;
 
-public record Remember(int number) implements Instruction {}
+public record Remember(int number) implements EntityStatement {}

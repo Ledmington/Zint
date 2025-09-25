@@ -1,7 +1,7 @@
-prog = entityDeclaration+ ;
+prog = entity_declaration+ ;
 
-entityDeclaration =	entityNameAndType entityBody;
-entityNameAndType = ID IS ( A ZOMBIE
+entity_declaration = entity_name_and_type entity_statement+;
+entity_name_and_type = ID IS ( A ZOMBIE
                           | AN ENSLAVED_UNDEAD
                           | A GHOST
                           | A RESTLESS_UNDEAD
@@ -9,28 +9,27 @@ entityNameAndType = ID IS ( A ZOMBIE
                           | A FREE_WILLED_UNDEAD
                           | A DEMON
                           | A DJINN ) ;
-entityBody = SUMMON instruction+ ANIMATE
-           | SUMMON instruction+ BIND
-           | SUMMON instruction+ DISTURB
-           | TASK ID instruction+ ANIMATE
-           | TASK ID instruction+ BIND ;
 
-instruction = STUMBLE
-            | REND
-            | TURN
-            | ANIMATE ID?
-            | BANISH ID?
-            | DISTURB ID?
-            | FORGET ID?
-            | INVOKE ID?
-            | MOAN ID?
-            | REMEMBER NUMBER
-            | SAY ID? STRING_LITERAL
-            | REMEMBERING ID? ID
-            | SHAMBLE instruction+ UNTIL ID
-            | SHAMBLE instruction+ AROUND
-            | TASTE ID GOOD instruction+ BAD instruction+ SPIT
-            | TASK ID instruction+ ANIMATE ;
+entity_statement = STUMBLE
+                 | REND
+                 | TURN
+                 | ANIMATE ID?
+                 | BANISH ID?
+                 | DISTURB ID?
+                 | FORGET ID?
+                 | INVOKE ID?
+                 | MOAN ID?
+                 | REMEMBER NUMBER
+                 | SAY ID? STRING_LITERAL
+                 | REMEMBERING ID? ID
+                 | SHAMBLE entity_statement+ UNTIL ID
+                 | SHAMBLE entity_statement+ AROUND
+                 | TASTE ID GOOD entity_statement+ BAD entity_statement+ SPIT
+                 | SUMMON entity_statement+ ANIMATE ID?
+                 | SUMMON entity_statement+ BIND
+                 | SUMMON entity_statement+ DISTURB ID?
+                 | TASK ID entity_statement+ ANIMATE ID?
+                 | TASK ID entity_statement+ BIND ;
 
 IS = "is";
 A = "a";

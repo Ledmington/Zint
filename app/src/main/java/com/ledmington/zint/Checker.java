@@ -17,13 +17,8 @@
  */
 package com.ledmington.zint;
 
-import java.util.List;
-
-import com.ledmington.zint.ast.EntityDeclaration;
 import com.ledmington.zint.ast.Program;
-import com.ledmington.zint.ast.Task;
 import com.ledmington.zint.exc.DuplicateEntityName;
-import com.ledmington.zint.exc.DuplicateTaskName;
 
 public final class Checker {
 	private Checker() {}
@@ -46,7 +41,7 @@ public final class Checker {
 	}
 
 	private static void checkDuplicateTaskNames(final Program ast) {
-		for (final EntityDeclaration decl : ast.declarations()) {
+		/*for (final EntityDeclaration decl : ast.declarations()) {
 			final List<Task> taskDeclarations = decl.body().instructions().stream()
 					.filter(inst -> inst instanceof Task)
 					.map(inst -> (Task) inst)
@@ -60,6 +55,6 @@ public final class Checker {
 					}
 				}
 			}
-		}
+		}*/
 	}
 }

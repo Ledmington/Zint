@@ -28,14 +28,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.ledmington.zint.ast.BodyType;
-import com.ledmington.zint.ast.EntityBody;
 import com.ledmington.zint.ast.EntityDeclaration;
 import com.ledmington.zint.ast.EntityType;
 import com.ledmington.zint.ast.Forget;
 import com.ledmington.zint.ast.Program;
 import com.ledmington.zint.ast.Remember;
 import com.ledmington.zint.ast.Say;
+import com.ledmington.zint.ast.SummonBind;
 import com.ledmington.zint.ast.Task;
 import com.ledmington.zint.gen.ZombieParser;
 import com.ledmington.zint.gen.ZombieParser.Node;
@@ -47,87 +46,59 @@ public final class TestConversion {
 				Arguments.of(
 						"banana is a zombie summon remember 12 bind",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.ZOMBIE,
-								new EntityBody(BodyType.SUMMON_BIND, List.of(new Remember(12))))))),
+								"banana", EntityType.ZOMBIE, List.of(new SummonBind(new Remember(12))))))),
 				Arguments.of(
 						"banana is an enslaved undead summon remember 12 bind",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.ZOMBIE,
-								new EntityBody(BodyType.SUMMON_BIND, List.of(new Remember(12))))))),
+								"banana", EntityType.ZOMBIE, List.of(new SummonBind(new Remember(12))))))),
 				Arguments.of(
 						"banana is a ghost summon remember 12 bind",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.GHOST,
-								new EntityBody(BodyType.SUMMON_BIND, List.of(new Remember(12))))))),
+								"banana", EntityType.GHOST, List.of(new SummonBind(new Remember(12))))))),
 				Arguments.of(
 						"banana is a restless undead summon remember 12 bind",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.GHOST,
-								new EntityBody(BodyType.SUMMON_BIND, List.of(new Remember(12))))))),
+								"banana", EntityType.GHOST, List.of(new SummonBind(new Remember(12))))))),
 				Arguments.of(
 						"banana is a vampire summon remember 12 bind",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.VAMPIRE,
-								new EntityBody(BodyType.SUMMON_BIND, List.of(new Remember(12))))))),
+								"banana", EntityType.VAMPIRE, List.of(new SummonBind(new Remember(12))))))),
 				Arguments.of(
 						"banana is a free-willed undead summon remember 12 bind",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.VAMPIRE,
-								new EntityBody(BodyType.SUMMON_BIND, List.of(new Remember(12))))))),
+								"banana", EntityType.VAMPIRE, List.of(new SummonBind(new Remember(12))))))),
 				Arguments.of(
 						"banana is a demon summon remember 12 bind",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.DEMON,
-								new EntityBody(BodyType.SUMMON_BIND, List.of(new Remember(12))))))),
+								"banana", EntityType.DEMON, List.of(new SummonBind(new Remember(12))))))),
 				Arguments.of(
 						"banana is a djinn summon remember 12 bind",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.DJINN,
-								new EntityBody(BodyType.SUMMON_BIND, List.of(new Remember(12))))))),
+								"banana", EntityType.DJINN, List.of(new SummonBind(new Remember(12))))))),
 				Arguments.of(
 						"banana is a zombie summon forget bind",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.ZOMBIE,
-								new EntityBody(BodyType.SUMMON_BIND, List.of(new Forget())))))),
+								"banana", EntityType.ZOMBIE, List.of(new SummonBind(new Forget())))))),
 				Arguments.of(
 						"banana is a zombie summon forget animate",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.ZOMBIE,
-								new EntityBody(BodyType.SUMMON_ANIMATE, List.of(new Forget())))))),
+								"banana", EntityType.ZOMBIE, List.of(new SummonBind(new Forget())))))),
 				Arguments.of(
 						"banana is a zombie summon forget disturb",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.ZOMBIE,
-								new EntityBody(BodyType.SUMMON_DISTURB, List.of(new Forget())))))),
+								"banana", EntityType.ZOMBIE, List.of(new SummonBind(new Forget())))))),
 				Arguments.of(
 						"banana is a zombie task example forget animate",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.ZOMBIE,
-								new EntityBody(BodyType.TASK_ANIMATE, List.of(new Forget())))))),
+								"banana", EntityType.ZOMBIE, List.of(new SummonBind(new Forget())))))),
 				Arguments.of(
 						"banana is a zombie task example forget bind",
 						new Program(List.of(new EntityDeclaration(
-								"banana",
-								EntityType.ZOMBIE,
-								new EntityBody(BodyType.TASK_BIND, List.of(new Forget())))))),
+								"banana", EntityType.ZOMBIE, List.of(new SummonBind(new Forget())))))),
 				Arguments.of(
 						"example is a vampire summon forget example bind",
 						new Program(List.of(new EntityDeclaration(
-								"example",
-								EntityType.VAMPIRE,
-								new EntityBody(BodyType.SUMMON_BIND, List.of(new Forget(Optional.of("example")))))))),
+								"example", EntityType.VAMPIRE, List.of(new Forget(Optional.of("example"))))))),
 				// from documentation
 				Arguments.of(
 						String.join(
@@ -141,9 +112,7 @@ public final class TestConversion {
 						new Program(List.of(new EntityDeclaration(
 								"HelloWorld",
 								EntityType.ZOMBIE,
-								new EntityBody(
-										BodyType.SUMMON_ANIMATE,
-										List.of(new Task("SayHello", List.of(new Say("Hello World!"))))))))),
+								List.of(new Task("SayHello", List.of(new Say("Hello World!")))))))),
 				Arguments.of(
 						String.join(
 								" ",

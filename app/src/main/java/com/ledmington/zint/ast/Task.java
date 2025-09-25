@@ -19,4 +19,4 @@ package com.ledmington.zint.ast;
 
 import java.util.List;
 
-public record Task(String name, List<Instruction> instructions) implements Instruction {}
+public record Task(String name, List<EntityStatement> statements) implements EntityStatement {}

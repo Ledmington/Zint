@@ -19,7 +19,7 @@ package com.ledmington.zint.ast;
 
 import java.util.Optional;
 
-public record Forget(Optional<String> entityName) implements Instruction {
+public record Forget(Optional<String> entityName) implements EntityStatement {
 	public Forget() {
 		this(Optional.empty());
 	}

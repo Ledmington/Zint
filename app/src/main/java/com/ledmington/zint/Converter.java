@@ -17,34 +17,17 @@
  */
 package com.ledmington.zint;
 
-import java.util.List;
-import java.util.Optional;
-
-import com.ledmington.zint.ast.BodyType;
-import com.ledmington.zint.ast.EntityBody;
 import com.ledmington.zint.ast.EntityDeclaration;
+import com.ledmington.zint.ast.EntityStatement;
 import com.ledmington.zint.ast.EntityType;
 import com.ledmington.zint.ast.Forget;
-import com.ledmington.zint.ast.Instruction;
 import com.ledmington.zint.ast.Program;
 import com.ledmington.zint.ast.Remember;
+import com.ledmington.zint.ast.SummonBind;
+import com.ledmington.zint.ast.Task;
 import com.ledmington.zint.gen.ZombieParser;
 import com.ledmington.zint.gen.ZombieParser.Node;
-import com.ledmington.zint.gen.ZombieParser.Terminal;
-import com.ledmington.zint.gen.ZombieParser.entityBody;
-import com.ledmington.zint.gen.ZombieParser.entityDeclaration;
-import com.ledmington.zint.gen.ZombieParser.instruction;
 import com.ledmington.zint.gen.ZombieParser.prog;
-import com.ledmington.zint.gen.ZombieParser.sequence_10;
-import com.ledmington.zint.gen.ZombieParser.sequence_11;
-import com.ledmington.zint.gen.ZombieParser.sequence_12;
-import com.ledmington.zint.gen.ZombieParser.sequence_16;
-import com.ledmington.zint.gen.ZombieParser.sequence_19;
-import com.ledmington.zint.gen.ZombieParser.sequence_5;
-import com.ledmington.zint.gen.ZombieParser.sequence_6;
-import com.ledmington.zint.gen.ZombieParser.sequence_7;
-import com.ledmington.zint.gen.ZombieParser.sequence_8;
-import com.ledmington.zint.gen.ZombieParser.sequence_9;
 
 public final class Converter {
 
@@ -56,13 +39,13 @@ public final class Converter {
 	}
 
 	private static Program convertProg(final prog p) {
-		return new Program(p.entityDeclaration().stream()
+		return new Program(p.entity_declaration().stream()
 				.map(Converter::convertEntityDeclaration)
 				.toList());
 	}
 
-	private static EntityDeclaration convertEntityDeclaration(final entityDeclaration ed) {
-		final String name = ed.entityNameAndType().ID().literal();
+	private static EntityDeclaration convertEntityDeclaration(final ZombieParser.entity_declaration ed) {
+		final String name = ed.entity_name_and_type().ID().literal();
 		final String entityTypeString = getEntityTypeString(ed);
 		final EntityType entityType =
 				switch (entityTypeString) {
@@ -76,66 +59,93 @@ public final class Converter {
 								String.format("Unknown entity type: '%s'.", entityTypeString));
 				};
 
-		return new EntityDeclaration(name, entityType, convertEntityBody(ed.entityBody()));
+		return new EntityDeclaration(
+				name,
+				entityType,
+				ed.one_or_more_0().entity_statement().stream()
+						.map(Converter::convertEntityStatement)
+						.toList());
 	}
 
-	private static String getEntityTypeString(final entityDeclaration ed) {
-		final Node decl = ed.entityNameAndType().or_0().match();
+	private static String getEntityTypeString(final ZombieParser.entity_declaration ed) {
+		final Node decl = ed.entity_name_and_type().or_0().match();
 		return switch (decl) {
-			case sequence_5 s -> s.ZOMBIE().literal();
-			case sequence_6 s -> s.ENSLAVED_UNDEAD().literal();
-			case sequence_7 s -> s.GHOST().literal();
-			case sequence_8 s -> s.RESTLESS_UNDEAD().literal();
-			case sequence_9 s -> s.VAMPIRE().literal();
-			case sequence_10 s -> s.FREE_WILLED_UNDEAD().literal();
-			case sequence_11 s -> s.DEMON().literal();
-			case sequence_12 s -> s.DJINN().literal();
+			case ZombieParser.sequence_0 s -> s.ZOMBIE().literal();
+			case ZombieParser.sequence_1 s -> s.ENSLAVED_UNDEAD().literal();
+			case ZombieParser.sequence_2 s -> s.GHOST().literal();
+			case ZombieParser.sequence_3 s -> s.RESTLESS_UNDEAD().literal();
+			case ZombieParser.sequence_4 s -> s.VAMPIRE().literal();
+			case ZombieParser.sequence_5 s -> s.FREE_WILLED_UNDEAD().literal();
+			case ZombieParser.sequence_6 s -> s.DEMON().literal();
+			case ZombieParser.sequence_7 s -> s.DJINN().literal();
 			default -> throw new IllegalArgumentException(String.format("Unknown entity declaration: '%s'.", decl));
 		};
 	}
 
-	private static EntityBody convertEntityBody(final entityBody entityBody) {
-		final BodyType type;
-		final List<instruction> inst;
-		switch (entityBody.match()) {
-			case ZombieParser.sequence_0 s -> {
-				type = BodyType.SUMMON_ANIMATE;
-				inst = s.one_or_more_0().instruction();
-			}
-			case ZombieParser.sequence_1 s -> {
-				type = BodyType.SUMMON_BIND;
-				inst = s.one_or_more_1().instruction();
-			}
-			case ZombieParser.sequence_2 s -> {
-				type = BodyType.SUMMON_DISTURB;
-				inst = s.one_or_more_2().instruction();
-			}
-			case ZombieParser.sequence_3 s -> {
-				type = BodyType.TASK_ANIMATE;
-				inst = s.one_or_more_3().instruction();
-			}
-			case ZombieParser.sequence_4 s -> {
-				type = BodyType.TASK_BIND;
-				inst = s.one_or_more_4().instruction();
-			}
-			default -> throw new IllegalStateException(String.format("Unknown body type: '%s'.", entityBody.match()));
-		}
-		final List<Instruction> instructions =
-				inst.stream().map(Converter::convertInstruction).toList();
-		return new EntityBody(type, instructions);
-	}
-
-	private static Instruction convertInstruction(final instruction n) {
-		return switch (n.match()) {
-			case sequence_16 s16 -> {
-				final Terminal id = s16.zero_or_one_3().ID();
-				yield new Forget(id == null ? Optional.empty() : Optional.of(id.literal()));
-			}
-			case sequence_19 s19 -> new Remember(Integer.parseInt(s19.NUMBER().literal()));
-			default -> throw new IllegalArgumentException(String.format("Unknown instruction type: '%s'.", n.match()));
+	private static EntityStatement convertEntityStatement(final ZombieParser.entity_statement es) {
+		return switch (es.match()) {
+			case ZombieParser.sequence_11 ignored -> new Forget();
+			case ZombieParser.sequence_14 s ->
+				new Remember(Integer.parseInt(s.NUMBER().literal()));
+			case ZombieParser.sequence_21 s ->
+				new SummonBind(s.one_or_more_6().entity_statement().stream()
+						.map(Converter::convertEntityStatement)
+						.toList());
+			case ZombieParser.sequence_24 s ->
+				new Task(
+						s.ID().literal(),
+						s.one_or_more_9().entity_statement().stream()
+								.map(Converter::convertEntityStatement)
+								.toList());
+			default -> throw new IllegalArgumentException(String.format("Unknown entity statement: '%s'.", es));
 		};
 	}
 
+	/*
+
+
+		private static EntityBody convertEntityBody(final entity_body entityBody) {
+			final BodyType type;
+			final List<instruction> inst;
+			switch (entityBody.match()) {
+				case ZombieParser.sequence_0 s -> {
+					type = BodyType.SUMMON_ANIMATE;
+					inst = s.one_or_more_0().instruction();
+				}
+				case ZombieParser.sequence_1 s -> {
+					type = BodyType.SUMMON_BIND;
+					inst = s.one_or_more_1().instruction();
+				}
+				case ZombieParser.sequence_2 s -> {
+					type = BodyType.SUMMON_DISTURB;
+					inst = s.one_or_more_2().instruction();
+				}
+				case ZombieParser.sequence_3 s -> {
+					type = BodyType.TASK_ANIMATE;
+					inst = s.one_or_more_3().instruction();
+				}
+				case ZombieParser.sequence_4 s -> {
+					type = BodyType.TASK_BIND;
+					inst = s.one_or_more_4().instruction();
+				}
+				default -> throw new IllegalStateException(String.format("Unknown body type: '%s'.", entityBody.match()));
+			}
+			final List<Instruction> instructions =
+					inst.stream().map(Converter::convertInstruction).toList();
+			return new EntityBody(type, instructions);
+		}
+
+		private static Instruction convertInstruction(final instruction n) {
+			return switch (n.match()) {
+				case sequence_16 s16 -> {
+					final Terminal id = s16.zero_or_one_3().ID();
+					yield new Forget(id == null ? Optional.empty() : Optional.of(id.literal()));
+				}
+				case sequence_19 s19 -> new Remember(Integer.parseInt(s19.NUMBER().literal()));
+				default -> throw new IllegalArgumentException(String.format("Unknown instruction type: '%s'.", n.match()));
+			};
+		}
+	*/
 	private static String trimDoubleQuotes(final String literal) {
 		final int n = literal.length();
 		if (literal.charAt(0) != '"' || literal.charAt(n - 1) != '"') {

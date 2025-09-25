@@ -17,4 +17,4 @@
  */
 package com.ledmington.zint.ast;
 
-public record Say(String literal) implements Instruction {}
+public record Say(String literal) implements EntityStatement {}
