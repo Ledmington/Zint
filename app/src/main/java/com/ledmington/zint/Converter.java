@@ -17,6 +17,9 @@
  */
 package com.ledmington.zint;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.ledmington.zint.ast.EntityDeclaration;
 import com.ledmington.zint.ast.EntityStatement;
 import com.ledmington.zint.ast.EntityType;
@@ -24,9 +27,9 @@ import com.ledmington.zint.ast.Forget;
 import com.ledmington.zint.ast.Program;
 import com.ledmington.zint.ast.Remember;
 import com.ledmington.zint.ast.SummonBind;
-import com.ledmington.zint.ast.Task;
 import com.ledmington.zint.gen.ZombieParser;
 import com.ledmington.zint.gen.ZombieParser.Node;
+import com.ledmington.zint.gen.ZombieParser.Terminal;
 import com.ledmington.zint.gen.ZombieParser.prog;
 
 public final class Converter {
@@ -46,17 +49,16 @@ public final class Converter {
 
 	private static EntityDeclaration convertEntityDeclaration(final ZombieParser.entity_declaration ed) {
 		final String name = ed.entity_name_and_type().ID().literal();
-		final String entityTypeString = getEntityTypeString(ed);
+		final Node entityTypeNode = ed.entity_name_and_type().or_0().match();
 		final EntityType entityType =
-				switch (entityTypeString) {
-					case "zombie", "enslaved undead" -> EntityType.ZOMBIE;
-					case "ghost", "restless undead" -> EntityType.GHOST;
-					case "vampire", "free-willed undead" -> EntityType.VAMPIRE;
-					case "demon" -> EntityType.DEMON;
-					case "djinn" -> EntityType.DJINN;
+				switch (entityTypeNode) {
+					case ZombieParser.zombie ignored -> EntityType.ZOMBIE;
+					case ZombieParser.ghost ignored -> EntityType.GHOST;
+					case ZombieParser.vampire ignored -> EntityType.VAMPIRE;
+					case ZombieParser.demon ignored -> EntityType.DEMON;
+					case ZombieParser.djinn ignored -> EntityType.DJINN;
 					default ->
-						throw new IllegalArgumentException(
-								String.format("Unknown entity type: '%s'.", entityTypeString));
+						throw new IllegalArgumentException(String.format("Unknown entity type: '%s'.", entityTypeNode));
 				};
 
 		return new EntityDeclaration(
@@ -67,38 +69,30 @@ public final class Converter {
 						.toList());
 	}
 
-	private static String getEntityTypeString(final ZombieParser.entity_declaration ed) {
-		final Node decl = ed.entity_name_and_type().or_0().match();
-		return switch (decl) {
-			case ZombieParser.sequence_0 s -> s.ZOMBIE().literal();
-			case ZombieParser.sequence_1 s -> s.ENSLAVED_UNDEAD().literal();
-			case ZombieParser.sequence_2 s -> s.GHOST().literal();
-			case ZombieParser.sequence_3 s -> s.RESTLESS_UNDEAD().literal();
-			case ZombieParser.sequence_4 s -> s.VAMPIRE().literal();
-			case ZombieParser.sequence_5 s -> s.FREE_WILLED_UNDEAD().literal();
-			case ZombieParser.sequence_6 s -> s.DEMON().literal();
-			case ZombieParser.sequence_7 s -> s.DJINN().literal();
-			default -> throw new IllegalArgumentException(String.format("Unknown entity declaration: '%s'.", decl));
+	private static EntityStatement convertEntityStatement(final ZombieParser.entity_statement es) {
+		return switch (es.match()) {
+			case ZombieParser.forget f ->
+				new Forget(getOptional(f.zero_or_one_8().ID()));
+			case ZombieParser.remember r ->
+				new Remember(Integer.parseInt(r.NUMBER().literal()));
+			case ZombieParser.summon s -> {
+				final List<EntityStatement> statements = s.one_or_more_7().entity_statement().stream()
+						.map(Converter::convertEntityStatement)
+						.toList();
+				final Node summonType = s.or_1().match();
+				yield switch (summonType) {
+					case ZombieParser.Terminal t when t.literal().equals("bind") -> new SummonBind(statements);
+					default ->
+						throw new IllegalArgumentException(String.format("Unknown summon type: '%s'.", summonType));
+				};
+			}
+
+			default -> throw new IllegalArgumentException(String.format("Unknown entity statement: '%s'.", es));
 		};
 	}
 
-	private static EntityStatement convertEntityStatement(final ZombieParser.entity_statement es) {
-		return switch (es.match()) {
-			case ZombieParser.sequence_11 ignored -> new Forget();
-			case ZombieParser.sequence_14 s ->
-				new Remember(Integer.parseInt(s.NUMBER().literal()));
-			case ZombieParser.sequence_21 s ->
-				new SummonBind(s.one_or_more_6().entity_statement().stream()
-						.map(Converter::convertEntityStatement)
-						.toList());
-			case ZombieParser.sequence_24 s ->
-				new Task(
-						s.ID().literal(),
-						s.one_or_more_9().entity_statement().stream()
-								.map(Converter::convertEntityStatement)
-								.toList());
-			default -> throw new IllegalArgumentException(String.format("Unknown entity statement: '%s'.", es));
-		};
+	private static Optional<String> getOptional(final Terminal t) {
+		return t == null ? Optional.empty() : Optional.of(t.literal());
 	}
 
 	/*

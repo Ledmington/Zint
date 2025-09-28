@@ -1,14 +1,16 @@
 prog = entity_declaration+ ;
 
 entity_declaration = entity_name_and_type entity_statement+;
-entity_name_and_type = ID IS ( A ZOMBIE
-                          | AN ENSLAVED_UNDEAD
-                          | A GHOST
-                          | A RESTLESS_UNDEAD
-                          | A VAMPIRE
-                          | A FREE_WILLED_UNDEAD
-                          | A DEMON
-                          | A DJINN ) ;
+entity_name_and_type = ID IS ( zombie
+                             | ghost
+                             | vampire
+                             | demon
+                             | djinn ) ;
+zombie = A ZOMBIE | AN ENSLAVED_UNDEAD ;
+ghost = A GHOST | A RESTLESS_UNDEAD ;
+vampire = A VAMPIRE | A FREE_WILLED_UNDEAD ;
+demon = A DEMON ;
+djinn = A DJINN ;
 
 entity_statement = STUMBLE
                  | REND
@@ -16,20 +18,21 @@ entity_statement = STUMBLE
                  | ANIMATE ID?
                  | BANISH ID?
                  | DISTURB ID?
-                 | FORGET ID?
+                 | forget
                  | INVOKE ID?
                  | MOAN ID?
-                 | REMEMBER NUMBER
+                 | remember
                  | SAY ID? STRING_LITERAL
                  | REMEMBERING ID? ID
                  | SHAMBLE entity_statement+ UNTIL ID
                  | SHAMBLE entity_statement+ AROUND
                  | TASTE ID GOOD entity_statement+ BAD entity_statement+ SPIT
-                 | SUMMON entity_statement+ ANIMATE ID?
-                 | SUMMON entity_statement+ BIND
-                 | SUMMON entity_statement+ DISTURB ID?
+                 | summon
                  | TASK ID entity_statement+ ANIMATE ID?
                  | TASK ID entity_statement+ BIND ;
+forget = FORGET ID? ;
+remember = REMEMBER NUMBER ;
+summon = SUMMON entity_statement+ ( ANIMATE ID? | DISTURB ID? | BIND ) ;
 
 IS = "is";
 A = "a";
