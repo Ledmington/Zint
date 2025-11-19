@@ -12,27 +12,30 @@ vampire = A VAMPIRE | A FREE_WILLED_UNDEAD ;
 demon = A DEMON ;
 djinn = A DJINN ;
 
-entity_statement = STUMBLE
-                 | REND
-                 | TURN
-                 | ANIMATE ID?
-                 | BANISH ID?
-                 | DISTURB ID?
-                 | forget
-                 | INVOKE ID?
-                 | MOAN ID?
-                 | remember
-                 | SAY ID? STRING_LITERAL
-                 | REMEMBERING ID? ID
-                 | SHAMBLE entity_statement+ UNTIL ID
-                 | SHAMBLE entity_statement+ AROUND
-                 | TASTE ID GOOD entity_statement+ BAD entity_statement+ SPIT
-                 | summon
-                 | TASK ID entity_statement+ ANIMATE ID?
-                 | TASK ID entity_statement+ BIND ;
-forget = FORGET ID? ;
-remember = REMEMBER NUMBER ;
-summon = SUMMON entity_statement+ ( ANIMATE ID? | DISTURB ID? | BIND ) ;
+entity_statement = entity_statement_atom
+                 | entity_statement_control ;
+
+entity_statement_control = SHAMBLE entity_block UNTIL ID
+                         | SHAMBLE entity_block AROUND
+                         | TASTE ID GOOD entity_block BAD entity_block SPIT
+                         | SUMMON entity_block ( ANIMATE ID? | DISTURB ID? | BIND )
+                         | TASK ID entity_block ANIMATE ID?
+                         | TASK ID entity_block BIND ;
+
+entity_statement_atom = STUMBLE
+                      | REND
+                      | TURN
+                      | ANIMATE ID?
+                      | BANISH ID?
+                      | DISTURB ID?
+                      | FORGET ID?
+                      | INVOKE ID?
+                      | MOAN ID?
+                      | REMEMBER NUMBER
+                      | SAY ID? STRING_LITERAL
+                      | REMEMBERING ID? ID ;
+
+entity_block = entity_statement_atom+ ;
 
 IS = "is";
 A = "a";
