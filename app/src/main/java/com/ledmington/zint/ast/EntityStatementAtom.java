@@ -17,10 +17,4 @@
  */
 package com.ledmington.zint.ast;
 
-import java.util.List;
-
-public record SummonBind(List<EntityStatementAtom> statements) implements EntityStatementControl {
-	public SummonBind(final EntityStatementAtom... statements) {
-		this(List.of(statements));
-	}
-}
+public interface EntityStatementAtom extends EntityStatement {}

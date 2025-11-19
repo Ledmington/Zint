@@ -22,6 +22,8 @@ import java.util.Optional;
 
 import com.ledmington.zint.ast.EntityDeclaration;
 import com.ledmington.zint.ast.EntityStatement;
+import com.ledmington.zint.ast.EntityStatementAtom;
+import com.ledmington.zint.ast.EntityStatementControl;
 import com.ledmington.zint.ast.EntityType;
 import com.ledmington.zint.ast.Forget;
 import com.ledmington.zint.ast.Program;
@@ -71,80 +73,41 @@ public final class Converter {
 
 	private static EntityStatement convertEntityStatement(final ZombieParser.entity_statement es) {
 		return switch (es.match()) {
-			case ZombieParser.forget f ->
-				new Forget(getOptional(f.zero_or_one_8().ID()));
-			case ZombieParser.remember r ->
-				new Remember(Integer.parseInt(r.NUMBER().literal()));
-			case ZombieParser.summon s -> {
-				final List<EntityStatement> statements = s.one_or_more_7().entity_statement().stream()
-						.map(Converter::convertEntityStatement)
+			case ZombieParser.entity_statement_atom a -> convertEntityStatementAtom(a);
+			case ZombieParser.entity_statement_control c -> convertEntityStatementControl(c);
+			default -> throw new IllegalArgumentException(String.format("Unknown entity statement: '%s'.", es));
+		};
+	}
+
+	private static EntityStatementAtom convertEntityStatementAtom(final ZombieParser.entity_statement_atom a) {
+		return switch (a.match()) {
+			case ZombieParser.sequence_3 s ->
+				new Forget(getOptional(s.zero_or_one_3().ID()));
+			case ZombieParser.sequence_6 s ->
+				new Remember(Integer.parseInt(s.NUMBER().literal()));
+			default -> throw new IllegalArgumentException(String.format("Unknown entity statement atom: '%s'.", a));
+		};
+	}
+
+	private static EntityStatementControl convertEntityStatementControl(final ZombieParser.entity_statement_control c) {
+		return switch (c.match()) {
+			case ZombieParser.sequence_12 s -> {
+				// summon
+				final List<EntityStatementAtom> les = s.entity_block().entity_statement_atom().stream()
+						.map(Converter::convertEntityStatementAtom)
 						.toList();
 				final Node summonType = s.or_1().match();
 				yield switch (summonType) {
-					case ZombieParser.Terminal t when t.literal().equals("bind") -> new SummonBind(statements);
+					case ZombieParser.Terminal t when t.literal().equals("bind") -> new SummonBind(les);
 					default ->
 						throw new IllegalArgumentException(String.format("Unknown summon type: '%s'.", summonType));
 				};
 			}
-
-			default -> throw new IllegalArgumentException(String.format("Unknown entity statement: '%s'.", es));
+			default -> throw new IllegalArgumentException(String.format("Unknown entity statement control: '%s'.", c));
 		};
 	}
 
 	private static Optional<String> getOptional(final Terminal t) {
 		return t == null ? Optional.empty() : Optional.of(t.literal());
-	}
-
-	/*
-
-
-		private static EntityBody convertEntityBody(final entity_body entityBody) {
-			final BodyType type;
-			final List<instruction> inst;
-			switch (entityBody.match()) {
-				case ZombieParser.sequence_0 s -> {
-					type = BodyType.SUMMON_ANIMATE;
-					inst = s.one_or_more_0().instruction();
-				}
-				case ZombieParser.sequence_1 s -> {
-					type = BodyType.SUMMON_BIND;
-					inst = s.one_or_more_1().instruction();
-				}
-				case ZombieParser.sequence_2 s -> {
-					type = BodyType.SUMMON_DISTURB;
-					inst = s.one_or_more_2().instruction();
-				}
-				case ZombieParser.sequence_3 s -> {
-					type = BodyType.TASK_ANIMATE;
-					inst = s.one_or_more_3().instruction();
-				}
-				case ZombieParser.sequence_4 s -> {
-					type = BodyType.TASK_BIND;
-					inst = s.one_or_more_4().instruction();
-				}
-				default -> throw new IllegalStateException(String.format("Unknown body type: '%s'.", entityBody.match()));
-			}
-			final List<Instruction> instructions =
-					inst.stream().map(Converter::convertInstruction).toList();
-			return new EntityBody(type, instructions);
-		}
-
-		private static Instruction convertInstruction(final instruction n) {
-			return switch (n.match()) {
-				case sequence_16 s16 -> {
-					final Terminal id = s16.zero_or_one_3().ID();
-					yield new Forget(id == null ? Optional.empty() : Optional.of(id.literal()));
-				}
-				case sequence_19 s19 -> new Remember(Integer.parseInt(s19.NUMBER().literal()));
-				default -> throw new IllegalArgumentException(String.format("Unknown instruction type: '%s'.", n.match()));
-			};
-		}
-	*/
-	private static String trimDoubleQuotes(final String literal) {
-		final int n = literal.length();
-		if (literal.charAt(0) != '"' || literal.charAt(n - 1) != '"') {
-			throw new AssertionError();
-		}
-		return literal.substring(1, n - 1);
 	}
 }
