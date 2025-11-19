@@ -91,7 +91,7 @@ public final class Converter {
 
 	private static EntityStatementControl convertEntityStatementControl(final ZombieParser.entity_statement_control c) {
 		return switch (c.match()) {
-			case ZombieParser.sequence_12 s -> {
+			case ZombieParser.summon s -> {
 				// summon
 				final List<EntityStatementAtom> les = s.entity_block().entity_statement_atom().stream()
 						.map(Converter::convertEntityStatementAtom)

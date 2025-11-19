@@ -15,12 +15,19 @@ djinn = A DJINN ;
 entity_statement = entity_statement_atom
                  | entity_statement_control ;
 
-entity_statement_control = SHAMBLE entity_block UNTIL ID
-                         | SHAMBLE entity_block AROUND
-                         | TASTE ID GOOD entity_block BAD entity_block SPIT
-                         | SUMMON entity_block ( ANIMATE ID? | DISTURB ID? | BIND )
-                         | TASK ID entity_block ANIMATE ID?
-                         | TASK ID entity_block BIND ;
+entity_statement_control = shamble_until
+                         | shamble_around
+                         | taste
+                         | summon
+                         | task ;
+
+shamble_until = SHAMBLE entity_block UNTIL ID ;
+shamble_around = SHAMBLE entity_block AROUND ;
+taste = TASTE ID GOOD entity_block BAD entity_block SPIT ;
+summon = SUMMON entity_block ( ANIMATE | DISTURB | BIND ) ;
+task = TASK ID entity_block ( ANIMATE | BIND ) ;
+
+entity_block = entity_statement_atom+ ;
 
 entity_statement_atom = STUMBLE
                       | REND
@@ -34,8 +41,6 @@ entity_statement_atom = STUMBLE
                       | REMEMBER NUMBER
                       | SAY ID? STRING_LITERAL
                       | REMEMBERING ID? ID ;
-
-entity_block = entity_statement_atom+ ;
 
 IS = "is";
 A = "a";
