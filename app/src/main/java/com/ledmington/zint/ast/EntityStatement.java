@@ -1,6 +1,6 @@
 /*
  * Zint - ZOMBIE interpreter
- * Copyright (C) 2022-2025 Filippo Barbari <filippo.barbari@gmail.com>
+ * Copyright (C) 2022-2026 Filippo Barbari <filippo.barbari@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
